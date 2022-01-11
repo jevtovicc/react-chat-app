@@ -1,7 +1,7 @@
 
 function App() {
   return (
-    <h1>Git test</h1>
+    <h1 className="bg-green-700">Git test</h1>
   );
 }
 
