@@ -25,7 +25,7 @@ function Signup({ toggleAuthState }: Props) {
                     {...register('firstName', { required: "First Name is required" })}
                     id='firstName'
                     type='text'
-                    className="pl-2 py-2 rounded-sm bg-transparent text-gray-100 border border-gray-100" />
+                    className="pl-2 py-2 rounded-sm bg-transparent text-gray-100 border border-gray-100 focus:border-transparent" />
                 {errors.firstName && <small className="text-red-500">{errors.firstName.message}</small>}
             </div>
 
@@ -35,7 +35,7 @@ function Signup({ toggleAuthState }: Props) {
                     {...register('lastName', { required: "Last Name is required" })}
                     id='lastName'
                     type='text'
-                    className="pl-2 py-2 rounded-sm bg-transparent text-gray-100 border border-gray-100" />
+                    className="pl-2 py-2 rounded-sm bg-transparent text-gray-100 border border-gray-100 focus:border-transparent" />
                 {errors.lastName && <small className="text-red-500">{errors.lastName.message}</small>}
             </div>
 
@@ -48,7 +48,7 @@ function Signup({ toggleAuthState }: Props) {
                     })}
                     id='username'
                     type='text'
-                    className="pl-2 py-2 rounded-sm bg-transparent text-gray-100 border border-gray-100" />
+                    className="pl-2 py-2 rounded-sm bg-transparent text-gray-100 border border-gray-100 focus:border-transparent" />
                 {errors.username && <small className="text-red-500">{errors.username.message}</small>}
             </div>
 
@@ -61,13 +61,13 @@ function Signup({ toggleAuthState }: Props) {
                     })}
                     id='password'
                     type='password'
-                    className="pl-2 py-2 rounded-sm bg-transparent text-gray-100 border border-gray-100" />
+                    className="pl-2 py-2 rounded-sm bg-transparent text-gray-100 border border-gray-100 focus:border-transparent" />
                 {errors.password ?
                     <small className="text-red-500">{errors.password.message}</small> :
-                    <small className="text-gray-500">Minimun 6 characters</small>}
+                    <small className="text-gray-500">Min. 6 characters</small>}
             </div>
 
-            <button className="bg-blue-800 rounded-sm py-2 w-1/2 m-auto">Log in</button>
+            <button className="bg-blue-800 hover:bg-blue-700 rounded-sm py-2 w-1/2 m-auto">Log in</button>
             <small className="m-auto">Already have an account?{' '}
                 <strong
                     onClick={toggleAuthState}
