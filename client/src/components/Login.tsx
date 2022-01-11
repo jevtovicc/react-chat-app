@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import { login } from "../store/features/AuthSlice";
+import { useAppDispatch } from "../store/hooks";
 
 type FormValues = {
     username: string;
@@ -11,10 +13,11 @@ interface Props {
 
 function Login({ toggleAuthState }: Props) {
     const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+    const dispatch = useAppDispatch();
 
     return (
         <form
-            onSubmit={handleSubmit((data) => console.log(data))}
+            onSubmit={handleSubmit((data) => dispatch(login({ username: data.username, password: data.password })))}
             className="bg-gray-900 text-gray-200 max-w-xl flex flex-col space-y-3 py-4">
 
             <div className='flex flex-col w-1/2 m-auto'>
@@ -23,6 +26,7 @@ function Login({ toggleAuthState }: Props) {
                     {...register('username', { required: "Username is required" })}
                     id='username'
                     type='text'
+                    autoComplete="off"
                     className="pl-2 py-2 rounded-sm bg-transparent text-gray-100 border border-gray-100 focus:border-transparent" />
                 {errors.username && <small className="text-red-500">{errors.username.message}</small>}
             </div>

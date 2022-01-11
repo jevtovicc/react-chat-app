@@ -48,6 +48,7 @@ function Signup({ toggleAuthState }: Props) {
                     })}
                     id='username'
                     type='text'
+                    autoComplete="off"
                     className="pl-2 py-2 rounded-sm bg-transparent text-gray-100 border border-gray-100 focus:border-transparent" />
                 {errors.username && <small className="text-red-500">{errors.username.message}</small>}
             </div>
