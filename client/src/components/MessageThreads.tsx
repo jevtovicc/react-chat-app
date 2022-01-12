@@ -1,43 +1,19 @@
+import { useAppSelector } from "../store/hooks"
 import MessageThreadPreview from "./MessageThreadPreview"
 
-const messageThreads = [
-    {
-        id: 1,
-        threadPhotoSrc: 'https://www.w3schools.com/howto/img_avatar.png',
-        threadTitle: 'Elon Musk',
-        lastMessage: 'Life is too short for long-term grudges'
-    },
-    {
-        id: 2,
-        threadPhotoSrc: 'https://www.w3schools.com/howto/img_avatar.png',
-        threadTitle: 'Bill Gates',
-        lastMessage: 'Life is too short for long-term grudges'
-    },
-    {
-        id: 3,
-        threadPhotoSrc: 'https://www.w3schools.com/howto/img_avatar.png',
-        threadTitle: 'Mark Zuckerberg',
-        lastMessage: "Some people don't like change, but you need to embrace change if the alternative is disaster.Some people don't like change, but you need to embrace change if the alternative is disaster.Some people don't like change, but you need to embrace change if the alternative is disaster.Some people don't like change, but you need to embrace change if the alternative is disaster.Some people don't like change, but you need to embrace change if the alternative is disaster."
-    },
-    {
-        id: 4,
-        threadPhotoSrc: 'https://www.w3schools.com/howto/img_avatar.png',
-        threadTitle: 'Giannis Antetokounmpo',
-        lastMessage: 'Life is too short for long-term grudges'
-    },
-]
-
 function MessageThreadPreviews() {
+    const messageThreads = useAppSelector(state => state.messages.messageThreads)
+
     return (
         <div className="bg-gray-900 text-gray-100">
             <ul>
                 {messageThreads.map(mt => (
                     <MessageThreadPreview
-                        key={mt.id}
-                        threadId={mt.id}
+                        key={mt.threadId}
+                        threadId={mt.threadId}
                         threadPhotoSrc={mt.threadPhotoSrc}
                         threadTitle={mt.threadTitle}
-                        lastMessage={mt.lastMessage}
+                        lastMessage={mt.messages[mt.messages.length - 1].content}
                     />
                 ))}
             </ul>
