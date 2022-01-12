@@ -1,5 +1,7 @@
+import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import Auth from "./pages/Auth";
+import MessageThread from "./pages/MessageThread";
 import { useAppSelector } from "./store/hooks";
 
 function App() {
@@ -7,7 +9,11 @@ function App() {
 
   return (
     // isAuthenticated ? <Home /> : <Auth />
-    <Home />
+    <Routes>
+      <Route path='/' element={<Home />}></Route>
+      <Route path='/threads/:threadId' element={<MessageThread />} />
+      <Route path='*' element={<Navigate to='/' />} />
+    </Routes>
   );
 }
 
