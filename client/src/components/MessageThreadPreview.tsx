@@ -4,7 +4,7 @@ interface Props {
     lastMessage: string,
 }
 
-function MessageThread({ threadPhotoSrc, threadTitle, lastMessage }: Props) {
+function MessageThreadPreview({ threadPhotoSrc, threadTitle, lastMessage }: Props) {
     return (
         <li className="flex place-items-start space-x-3 border border-gray-800 py-4 px-2">
             <img
@@ -19,4 +19,4 @@ function MessageThread({ threadPhotoSrc, threadTitle, lastMessage }: Props) {
     )
 }
 
-export default MessageThread
+export default MessageThreadPreview

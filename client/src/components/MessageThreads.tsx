@@ -1,4 +1,4 @@
-import MessageThread from "./MessageThread"
+import MessageThreadPreview from "./MessageThreadPreview"
 
 const messageThreads = [
     {
@@ -27,12 +27,12 @@ const messageThreads = [
     },
 ]
 
-function MessageThreads() {
+function MessageThreadPreviews() {
     return (
         <div className="bg-gray-900 text-gray-100">
             <ul>
                 {messageThreads.map(mt => (
-                    <MessageThread
+                    <MessageThreadPreview
                         key={mt.id}
                         threadPhotoSrc={mt.threadPhotoSrc}
                         threadTitle={mt.threadTitle}
@@ -44,4 +44,4 @@ function MessageThreads() {
     )
 }
 
-export default MessageThreads
+export default MessageThreadPreviews
