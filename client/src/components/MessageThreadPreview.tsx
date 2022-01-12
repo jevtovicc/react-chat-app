@@ -13,7 +13,7 @@ function MessageThreadPreview({ threadId, threadPhotoSrc, threadTitle, lastMessa
     return (
         <li
             onClick={() => navigate(`/threads/${threadId}`)}
-            className="flex place-items-start space-x-3 border border-gray-800 py-4 px-2 cursor-pointer hover:bg-gray-800 transition-colors">
+            className="flex place-items-start space-x-3 border-y border-gray-800 py-4 px-2 cursor-pointer hover:bg-gray-800 transition-colors">
             <img
                 src={threadPhotoSrc}
                 alt='thread-avatar'
