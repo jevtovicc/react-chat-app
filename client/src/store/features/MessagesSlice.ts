@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface Message {
     id: number,
@@ -89,12 +89,27 @@ const initialState: MessagesState = {
     ]
 }
 
+type NewMessage = {
+    messageThreadId: number,
+    messageContent: string
+}
+
 export const messagesSlice = createSlice({
     name: 'messages',
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
+        sendMessage: (state, action: PayloadAction<NewMessage>) => {
+            const message = {
+                id: Math.random(),
+                sender: 'Mark Zuckerberg',
+                photoSrc: 'https://www.w3schools.com/howto/img_avatar.png',
+                content: action.payload.messageContent
+            }
+            state.messageThreads.find(mt => mt.threadId === action.payload.messageThreadId)?.messages.push(message)
+        }
     }
 })
 
+export const { sendMessage } = messagesSlice.actions;
 export default messagesSlice.reducer
