@@ -51,6 +51,12 @@ const initialState: MessagesState = {
                     sender: 'Bill Gates',
                     photoSrc: 'https://www.w3schools.com/howto/img_avatar.png',
                     content: 'Life is too short for long-term grudges'
+                },
+                {
+                    id: 31,
+                    sender: 'Bill Gates',
+                    photoSrc: 'https://www.w3schools.com/howto/img_avatar.png',
+                    content: 'Life is too short for long-term grudges'
                 }
             ],
         },
