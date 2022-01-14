@@ -1,4 +1,4 @@
-import { Message } from "../store/features/MessagesSlice"
+import { Message } from "../types/types"
 
 interface Props {
     message: Message
