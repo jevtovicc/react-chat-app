@@ -18,7 +18,6 @@ function MessageThread() {
         if (!messageThread) {
             navigate('/');
         }
-        console.log('UseEffect1')
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messageThread, navigate])
 
