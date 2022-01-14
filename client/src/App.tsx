@@ -11,7 +11,7 @@ import { MessageThread } from "./types/types";
 const ENDPOINT = "http://127.0.0.1:9000";
 
 function App() {
-    const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated)
+    const user = useAppSelector(state => state.auth.user)
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -22,10 +22,9 @@ function App() {
     }, []);
 
     return (
-        // isAuthenticated ? <Home /> : <Auth />
         <Routes>
-            <Route path='/' element={<Home />}></Route>
-            <Route path='/threads/:threadId' element={<MessageThreadPage />} />
+            <Route path='/' element={user ? <Home /> : <Auth />}></Route>
+            <Route path='/threads/:threadId' element={user ? <MessageThreadPage /> : <Auth />} />
             <Route path='*' element={<Navigate to='/' />} />
         </Routes>
     );

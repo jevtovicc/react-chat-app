@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io'
 import cors from 'cors'
+import { router as authRoutes } from './routes/auth'
 
 const app = express();
 const server = http.createServer(app)
@@ -19,9 +20,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
-    res.send("Hello world!");
-})
+app.use('/api/auth', authRoutes)
 
 interface Message {
     id: number,
@@ -109,6 +108,7 @@ const messageThreads: MessageThread[] = [
         ],
     },
 ]
+
 
 io.on('connection', (socket) => {
     // messageThreads.forEach(mt => socket.join(`Thread:${mt.threadId}`))

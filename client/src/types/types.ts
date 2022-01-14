@@ -11,3 +11,11 @@ export interface MessageThread {
     threadTitle: string,
     messages: Message[]
 }
+
+
+export interface User {
+    firstName: string,
+    lastName: string,
+    username: string,
+    password: string
+};
