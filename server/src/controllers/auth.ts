@@ -23,7 +23,7 @@ export function login(req: Request<{}, {}, { username: string, password: string 
     if (!user) {
         res
             .status(401)
-            .json("Invalid credentials")
+            .json({ message: "Invalid credentials" })
     } else {
         res
             .status(201)

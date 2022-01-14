@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import axios, { AxiosError } from 'axios';
 import { User } from '../../types/types';
 
 // Define a type for the slice state
@@ -32,14 +33,14 @@ export const authSlice = createSlice({
             state.error = null
         });
 
-        builder.addCase(login.fulfilled, (state, action) => {
-            state.user = action.payload
+        builder.addCase(login.fulfilled, (state, { payload }) => {
+            state.user = payload
             state.status = 'idle'
         });
 
-        builder.addCase(login.rejected, (state, action) => {
-            if (action.payload) {
-                state.error = action.payload.message;
+        builder.addCase(login.rejected, (state, { payload }) => {
+            if (payload) {
+                state.error = payload.message;
             }
             state.status = 'idle';
         })
@@ -52,21 +53,20 @@ type LoginError = {
 
 export const login = createAsyncThunk<User, LoginValues, { rejectValue: LoginError }>(
     "login",
-    async (loginValues, thunkApi) => {
-        const response = await fetch('http://localhost:9000/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username: loginValues.username, password: loginValues.password })
-        });
-        if (response.status !== 201) {
-            return thunkApi.rejectWithValue({
-                message: await response.json() as string
-            })
+    async ({ username, password }, thunkApi) => {
+        try {
+            const response = await axios.post<User>('http://localhost:9000/api/auth/login', {
+                username: username,
+                password: password
+            });
+            return response.data;
+        } catch (e) {
+            if (axios.isAxiosError(e) && e.response) {
+                return thunkApi.rejectWithValue(e.response.data as LoginError)
+            } else {
+                return thunkApi.rejectWithValue({ message: 'Error on server side occurred' })
+            }
         }
-        const data = await response.json() as User;
-        return data;
     }
 );
 
