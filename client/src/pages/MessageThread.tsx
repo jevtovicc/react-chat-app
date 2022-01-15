@@ -57,7 +57,7 @@ function MessageThread() {
                             src='https://www.w3schools.com/howto/img_avatar.png'
                             alt='thread-avatar'
                             className="rounded-full h-14 w-14" />
-                        <strong>Elon Musk</strong>
+                        <strong>{messageThread?.name}</strong>
                     </div>
                     <button className='p-3 border-2 border-gray-800 rounded-full hover:border-green-700 hover:text-green-700 transition-colors'><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button>
                 </header>
@@ -70,7 +70,7 @@ function MessageThread() {
 
             <form className="flex" onSubmit={handleSubmit}>
                 <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} className="w-full bg-transparent text-gray-300 border border-gray-700 border-r-0 rounded-tl-lg rounded-bl-lg py-3 px-3 outline-none focus:border-blue-700" />
-                <button type="submit" className="bg-blue-700 border border-blue-700 py-3 px-2 rounded-tr-lg rounded-br-lg">
+                <button disabled={inputValue.trim().length === 0} type="submit" className="bg-blue-700 border border-blue-700 py-3 px-2 rounded-tr-lg rounded-br-lg disabled:cursor-not-allowed">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
                 </button>
 
