@@ -15,14 +15,21 @@ export async function getAllMessageThreads(req: Request, res: Response) {
     res.json(messageThreads)
 }
 
+// export async function addMessage(req: Request<{}, {}, { message: Message }>, res: Response) {
+//     const { message } = req.body;
+
+//     const newMessage = await prisma.message.create({
+//         data: message
+//     })
+
+//     res.json(newMessage)
+// }
+
 export async function addMessage(message: Message) {
-    await prisma.messageThread.update({
-        where: {
-            id: message.messageThreadId
-        },
-        data: {
-            // TODO: FIX FIX FIX
-            name: 'Some other thread name'
-        }
+
+    const newMessage = await prisma.message.create({
+        data: message
     })
+
+    return newMessage
 }

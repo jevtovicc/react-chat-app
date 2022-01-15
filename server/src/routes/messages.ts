@@ -5,3 +5,4 @@ export const router = express.Router();
 
 // GET /api/messageThreads/
 router.get('/', messagesController.getAllMessageThreads)
+router.post('/', messagesController.addMessage)

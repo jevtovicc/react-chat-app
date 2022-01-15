@@ -1,4 +1,5 @@
 export interface User {
+    id: number,
     firstName: string,
     lastName: string,
     username: string,
@@ -6,7 +7,7 @@ export interface User {
 };
 
 export interface Message {
-    id: number,
+    id?: number,
     user: User,
     sentAt?: Date,
     content: string,

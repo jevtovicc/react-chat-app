@@ -38,8 +38,6 @@ function MessageThread() {
         e.preventDefault();
 
         dispatch(sendMessage({
-            // TODO: FIX FIX FIX
-            id: 5,
             user: user!, // TODO: fix !
             content: inputValue,
             messageThreadId: messageThread?.id!

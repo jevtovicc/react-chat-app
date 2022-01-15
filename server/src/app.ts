@@ -30,9 +30,9 @@ io.on('connection', (socket) => {
 
     console.log('New client connected')
 
-    socket.on('chat message', (message: Message) => {
-        messagesController.addMessage(message);
-        io.emit('chat message', message)
+    socket.on('chat message', async (message: Message) => {
+        const newMessage = await messagesController.addMessage(message);
+        io.emit('chat message', newMessage)
     })
 })
 

@@ -18,7 +18,12 @@ export const socketSlice = createSlice({
     initialState,
     reducers: {
         sendMessage: (state, action: PayloadAction<Message>) => {
-            state.socket.emit('chat message', action.payload)
+            const message = {
+                messageThreadId: action.payload.messageThreadId,
+                content: action.payload.content,
+                userId: action.payload.user.id
+            }
+            state.socket.emit('chat message', message)
         }
     }
 })
