@@ -2,12 +2,12 @@ import { useNavigate } from "react-router-dom";
 
 interface Props {
     threadId: number,
-    threadPhotoSrc: string
+    threadPhotoUrl: string
     threadTitle: string,
     lastMessage: string,
 }
 
-function MessageThreadPreview({ threadId, threadPhotoSrc, threadTitle, lastMessage }: Props) {
+function MessageThreadPreview({ threadId, threadPhotoUrl, threadTitle, lastMessage }: Props) {
     const navigate = useNavigate();
 
     return (
@@ -15,7 +15,7 @@ function MessageThreadPreview({ threadId, threadPhotoSrc, threadTitle, lastMessa
             onClick={() => navigate(`/threads/${threadId}`)}
             className="flex place-items-start space-x-3 border-y border-gray-800 py-4 px-2 cursor-pointer hover:bg-gray-800 transition-colors">
             <img
-                src={threadPhotoSrc}
+                src={threadPhotoUrl}
                 alt='thread-avatar'
                 className="rounded-full h-14 w-14" />
             <div className="flex flex-col">

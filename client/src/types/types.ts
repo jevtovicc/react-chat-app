@@ -1,13 +1,12 @@
 export interface Message {
     id: number,
-    sender: string
+    sender: User
     content: string,
-    photoSrc: string,
 }
 
 export interface MessageThread {
     threadId: number,
-    threadPhotoSrc: string
+    threadPhotoUrl: string
     threadTitle: string,
     messages: Message[]
 }
@@ -18,4 +17,5 @@ export interface User {
     lastName: string,
     username: string,
     password: string
+    photoUrl: string,
 };

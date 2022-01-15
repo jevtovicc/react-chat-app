@@ -3,4 +3,5 @@ export default interface User {
     lastName: string,
     username: string,
     password: string
+    photoUrl: string,
 };

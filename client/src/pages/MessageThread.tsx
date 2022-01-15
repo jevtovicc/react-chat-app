@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
 import ChatMessage from '../components/ChatMessage';
-import { sendMessage } from '../store/features/MessagesSlice';
+import { addMessage } from '../store/features/MessagesSlice';
+import { sendMessage } from '../store/features/SocketSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { Message } from '../types/types';
 
 // TODO: change input for sending message to text are which automatically resizes when message gets long (up to the certaion point)
 function MessageThread() {
@@ -10,6 +12,8 @@ function MessageThread() {
     const navigate = useNavigate();
     // TODO: strongly type params to have threadId
     const messageThread = useAppSelector(state => state.messages.messageThreads.find(mt => mt.threadId === +params.threadId!))
+    const user = useAppSelector(state => state.auth.user);
+    const socket = useAppSelector(state => state.socket.socket)
     const dispatch = useAppDispatch();
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [inputValue, setInputValue] = useState("");
@@ -19,12 +23,29 @@ function MessageThread() {
             navigate('/');
         }
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+        socket.on('chat message', (messageThreadId: number, message: Message) => {
+            dispatch(addMessage({
+                messageThreadId,
+                message
+            }))
+        });
     }, [messageThread, navigate])
 
     // TODO: fix nullish value
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        dispatch(sendMessage({ messageThreadId: messageThread?.threadId || -1, messageContent: inputValue }))
+        const message: Message = {
+            id: Math.random(),
+            sender: user!, // TODO: fix !
+            content: inputValue
+        };
+
+        dispatch(sendMessage({
+            messageThreadId: messageThread?.threadId || -1,
+            message: message
+        }))
+
         setInputValue('');
     }
 

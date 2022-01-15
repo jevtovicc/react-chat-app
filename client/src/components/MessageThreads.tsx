@@ -24,7 +24,7 @@ function MessageThreadPreviews() {
                     <MessageThreadPreview
                         key={mt.threadId}
                         threadId={mt.threadId}
-                        threadPhotoSrc={mt.threadPhotoSrc}
+                        threadPhotoUrl={mt.threadPhotoUrl}
                         threadTitle={mt.threadTitle}
                         lastMessage={mt.messages[mt.messages.length - 1].content}
                     />

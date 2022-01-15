@@ -6,13 +6,15 @@ const users: User[] = [
         firstName: 'Filip',
         lastName: 'Jevtovic',
         username: 'jevtovic99',
-        password: 'sifra123'
+        password: 'sifra123',
+        photoUrl: 'https://www.w3schools.com/howto/img_avatar.png',
     },
     {
         firstName: 'Pera',
         lastName: 'Peric',
         username: 'pera123',
-        password: 'pera123'
+        password: 'pera123',
+        photoUrl: 'https://www.w3schools.com/howto/img_avatar.png',
     }
 ]
 
