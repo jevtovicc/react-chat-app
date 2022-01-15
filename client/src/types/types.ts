@@ -1,6 +1,13 @@
+export interface User {
+    firstName: string,
+    lastName: string,
+    username: string,
+    password: string
+};
+
 export interface Message {
     id: number,
-    sender: User
+    user: User
     content: string,
 }
 
@@ -11,11 +18,3 @@ export interface MessageThread {
     messages: Message[]
 }
 
-
-export interface User {
-    firstName: string,
-    lastName: string,
-    username: string,
-    password: string
-    photoUrl: string,
-};
