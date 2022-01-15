@@ -30,6 +30,10 @@ function MessageThread() {
                 message
             }))
         });
+
+        return () => {
+            socket.off('chat message')
+        }
     }, [messageThread, navigate])
 
     // TODO: fix nullish value
