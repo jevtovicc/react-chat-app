@@ -10,8 +10,8 @@ import { Message } from '../types/types';
 function MessageThread() {
     const params = useParams<{ threadId: string }>()
     const navigate = useNavigate();
-    // TODO: strongly type params to have threadId
-    const messageThread = useAppSelector(state => state.messages.messageThreads.find(mt => mt.threadId === +params.threadId!))
+    // TODO: strongly type params to have id
+    const messageThread = useAppSelector(state => state.messages.messageThreads.find(mt => mt.id === +params.threadId!))
     const user = useAppSelector(state => state.auth.user);
     const socket = useAppSelector(state => state.socket.socket)
     const dispatch = useAppDispatch();
@@ -24,11 +24,8 @@ function MessageThread() {
         }
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 
-        socket.on('chat message', (messageThreadId: number, message: Message) => {
-            dispatch(addMessage({
-                messageThreadId,
-                message
-            }))
+        socket.on('chat message', (message: Message) => {
+            dispatch(addMessage(message))
         });
 
         return () => {
@@ -39,15 +36,13 @@ function MessageThread() {
     // TODO: fix nullish value
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const message: Message = {
-            id: Math.random(),
-            sender: user!, // TODO: fix !
-            content: inputValue
-        };
 
         dispatch(sendMessage({
-            messageThreadId: messageThread?.threadId || -1,
-            message: message
+            // TODO: FIX FIX FIX
+            id: 5,
+            user: user!, // TODO: fix !
+            content: inputValue,
+            messageThreadId: messageThread?.id!
         }))
 
         setInputValue('');

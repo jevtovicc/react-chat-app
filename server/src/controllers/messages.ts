@@ -21,9 +21,8 @@ export async function addMessage(message: Message) {
             id: message.messageThreadId
         },
         data: {
-            messages: {
-                set: [message]
-            }
+            // TODO: FIX FIX FIX
+            name: 'Some other thread name'
         }
     })
 }

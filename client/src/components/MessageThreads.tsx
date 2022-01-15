@@ -1,20 +1,16 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks"
 import MessageThreadPreview from "./MessageThreadPreview"
-import { setMessageThreads } from "../store/features/MessagesSlice";
-import { fetchMessages } from "../store/features/SocketSlice";
 import { MessageThread } from "../types/types";
+import { fetchMessageThreads } from "../store/features/MessagesSlice";
 
 function MessageThreadPreviews() {
     const messageThreads = useAppSelector(state => state.messages.messageThreads)
-    const socket = useAppSelector(state => state.socket.socket)
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(fetchMessages())
-        socket.on('message threads', (messageThreads: MessageThread[]) => {
-            dispatch(setMessageThreads(messageThreads))
-        })
+        // TODO: fix empty object
+        dispatch(fetchMessageThreads({}))
     }, []);
 
     return (
@@ -22,10 +18,9 @@ function MessageThreadPreviews() {
             <ul>
                 {messageThreads.map(mt => (
                     <MessageThreadPreview
-                        key={mt.threadId}
-                        threadId={mt.threadId}
-                        threadPhotoUrl={mt.threadPhotoUrl}
-                        threadTitle={mt.threadTitle}
+                        key={mt.id}
+                        threadId={mt.id}
+                        name={mt.name}
                         lastMessage={mt.messages[mt.messages.length - 1].content}
                     />
                 ))}

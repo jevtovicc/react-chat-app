@@ -7,14 +7,16 @@ export interface User {
 
 export interface Message {
     id: number,
-    user: User
+    user: User,
+    sentAt?: Date,
     content: string,
+    messageThreadId: number
 }
 
 export interface MessageThread {
-    threadId: number,
-    threadPhotoUrl: string
-    threadTitle: string,
+    id: number,
+    name: string,
+    createdAt?: Date,
     messages: Message[]
 }
 
