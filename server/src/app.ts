@@ -111,9 +111,10 @@ const messageThreads: MessageThread[] = [
 
 
 io.on('connection', (socket) => {
+    console.log('New client connected')
     // messageThreads.forEach(mt => socket.join(`Thread:${mt.threadId}`))
     // messageThreads.forEach(mt => io.to(`Thread:${mt.threadId}`).emit("user connected"))
-    socket.emit('message threads', messageThreads)
+    socket.on('message threads', () => socket.emit('message threads', messageThreads))
 })
 
 server.listen(port, () => console.log(`Server is listening at: http://localhost:${port}`))

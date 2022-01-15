@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
 import authReducer from './features/AuthSlice'
 import messageReducer from './features/MessagesSlice'
+import socketReducer from './features/SocketSlice'
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
-        messages: messageReducer
+        messages: messageReducer,
+        socket: socketReducer
     }
 })
 

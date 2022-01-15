@@ -6,7 +6,7 @@ import { User } from '../../types/types';
 interface AuthState {
     status: 'loading' | 'idle',
     error: string | null
-    user: User | undefined
+    user?: User
 }
 
 // Define the initial state using that type

@@ -1,8 +1,21 @@
-import { useAppSelector } from "../store/hooks"
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks"
 import MessageThreadPreview from "./MessageThreadPreview"
+import { setMessageThreads } from "../store/features/MessagesSlice";
+import { fetchMessages } from "../store/features/SocketSlice";
+import { MessageThread } from "../types/types";
 
 function MessageThreadPreviews() {
     const messageThreads = useAppSelector(state => state.messages.messageThreads)
+    const socket = useAppSelector(state => state.socket.socket)
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(fetchMessages())
+        socket.on('message threads', (messageThreads: MessageThread[]) => {
+            dispatch(setMessageThreads(messageThreads))
+        })
+    }, []);
 
     return (
         <div className="bg-gray-900 text-gray-100">
