@@ -28,7 +28,10 @@ export async function getAllMessageThreads(req: Request, res: Response) {
 export async function addMessage(message: Message) {
 
     const newMessage = await prisma.message.create({
-        data: message
+        data: message,
+        include: {
+            user: true
+        }
     })
 
     return newMessage
