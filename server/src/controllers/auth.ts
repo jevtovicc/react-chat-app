@@ -20,3 +20,13 @@ export async function login(req: Request<{}, {}, { username: string, password: s
             .json(user)
     }
 }
+
+export async function signup(req: Request<{}, {}, { firstName: string, lastName: string, username: string, password: string }>, res: Response) {
+    const { firstName, lastName, username, password } = req.body;
+
+    const user = await prisma.user.create({
+        data: { firstName, lastName, username, password }
+    });
+
+    res.json(user)
+}

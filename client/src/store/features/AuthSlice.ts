@@ -28,6 +28,8 @@ export const authSlice = createSlice({
     reducers: {
     },
     extraReducers: (builder) => {
+
+        // login
         builder.addCase(login.pending, (state) => {
             state.status = 'loading';
             state.error = null
@@ -40,18 +42,32 @@ export const authSlice = createSlice({
 
         builder.addCase(login.rejected, (state, { payload }) => {
             if (payload) {
-                state.error = payload.message;
+                state.error = payload;
+            }
+            state.status = 'idle';
+        })
+
+        // signup
+        builder.addCase(signup.pending, (state) => {
+            state.status = 'loading';
+            state.error = null
+        });
+
+        builder.addCase(signup.fulfilled, (state, { payload }) => {
+            state.user = payload
+            state.status = 'idle'
+        });
+
+        builder.addCase(signup.rejected, (state, { payload }) => {
+            if (payload) {
+                state.error = payload;
             }
             state.status = 'idle';
         })
     }
 })
 
-type LoginError = {
-    message: string;
-};
-
-export const login = createAsyncThunk<User, LoginValues, { rejectValue: LoginError }>(
+export const login = createAsyncThunk<User, LoginValues, { rejectValue: string }>(
     "login",
     async ({ username, password }, thunkApi) => {
         try {
@@ -62,9 +78,32 @@ export const login = createAsyncThunk<User, LoginValues, { rejectValue: LoginErr
             return response.data;
         } catch (e) {
             if (axios.isAxiosError(e) && e.response) {
-                return thunkApi.rejectWithValue(e.response.data as LoginError)
+                return thunkApi.rejectWithValue(e.response.data as string)
             } else {
-                return thunkApi.rejectWithValue({ message: 'Error on server side occurred' })
+                return thunkApi.rejectWithValue('Error on server side occurred')
+            }
+        }
+    }
+);
+
+type SignupValues = {
+    firstName: string,
+    lastName: string,
+    username: string,
+    password: string,
+}
+
+export const signup = createAsyncThunk<User, SignupValues, { rejectValue: string }>(
+    "signup",
+    async (user, thunkApi) => {
+        try {
+            const response = await axios.post<User>('http://localhost:9000/api/auth/signup', user);
+            return response.data;
+        } catch (e) {
+            if (axios.isAxiosError(e) && e.response) {
+                return thunkApi.rejectWithValue(e.response.data as string)
+            } else {
+                return thunkApi.rejectWithValue('Error on server side occurred')
             }
         }
     }

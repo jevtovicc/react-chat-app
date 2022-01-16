@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import { signup } from "../store/features/AuthSlice";
+import { useAppDispatch } from "../store/hooks";
 
 type FormValues = {
     firstName: string;
@@ -13,10 +15,20 @@ interface Props {
 
 function Signup({ toggleAuthState }: Props) {
     const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+    const dispatch = useAppDispatch();
+
+    function handleSignup(data: FormValues) {
+        dispatch(signup({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            username: data.username,
+            password: data.password
+        }));
+    }
 
     return (
         <form
-            onSubmit={handleSubmit((data) => console.log(data))}
+            onSubmit={handleSubmit(data => handleSignup(data))}
             className="bg-gray-900 text-gray-200 flex flex-col space-y-3 py-4 h-screen items-center justify-center">
 
             <div className="flex flex-col space-y-3">
@@ -69,11 +81,11 @@ function Signup({ toggleAuthState }: Props) {
                         <small className="text-gray-500">Min. 6 characters</small>}
                 </div>
 
-                <button className="bg-blue-800 hover:bg-blue-700 rounded-sm py-2 m-auto w-full">Log in</button>
+                <button className="bg-blue-800 hover:bg-blue-700 rounded-sm py-2 m-auto w-full">Sign Up</button>
                 <small className="m-auto">Already have an account?{' '}
                     <strong
                         onClick={toggleAuthState}
-                        className='cursor-pointer hover:underline'>Sign in</strong>
+                        className='cursor-pointer hover:underline'>Log in</strong>
                 </small>
             </div>
 
