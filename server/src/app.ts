@@ -5,7 +5,7 @@ import cors from 'cors'
 import { router as authRoutes } from './routes/auth';
 import { router as messagesRoutes } from './routes/messages'
 import * as messagesController from './controllers/messages'
-import { Message } from '@prisma/client';
+import { Message, User } from '@prisma/client';
 
 const app = express();
 const server = http.createServer(app)
@@ -33,6 +33,10 @@ io.on('connection', (socket) => {
     socket.on('chat message', async (message: Message) => {
         const newMessage = await messagesController.addMessage(message);
         io.emit('chat message', newMessage)
+    })
+
+    socket.on('user typing', (user: User) => {
+        socket.broadcast.emit('user typing', user)
     })
 })
 
