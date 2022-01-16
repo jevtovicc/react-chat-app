@@ -66,7 +66,7 @@ function MessageThread() {
                 <div ref={messagesEndRef}></div>
             </div>
 
-            <form className="flex" onSubmit={handleSubmit}>
+            <form className="flex py-4" onSubmit={handleSubmit}>
                 <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} className="w-full bg-transparent text-gray-300 border border-gray-700 border-r-0 rounded-tl-lg rounded-bl-lg py-3 px-3 outline-none focus:border-blue-700" />
                 <button disabled={inputValue.trim().length === 0} type="submit" className="bg-blue-700 border border-blue-700 py-3 px-2 rounded-tr-lg rounded-br-lg disabled:cursor-not-allowed">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
