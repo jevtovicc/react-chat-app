@@ -18,7 +18,7 @@ function ChatMessage({ message }: Props) {
             <div className='text-gray-300 bg-gray-800 p-3 rounded-md'>
                 <strong>{message.user.username}</strong>
                 <span className="text-lg"> &#8226;</span>
-                <span> {dayjs(message.sentAt?.toString()).format('HH:mm')}</span>
+                <small> {dayjs(message.sentAt?.toString()).format('HH:mm')}</small>
                 <p>
                     {message.content}
                 </p>

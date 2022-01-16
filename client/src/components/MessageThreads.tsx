@@ -21,7 +21,7 @@ function MessageThreadPreviews() {
                         key={mt.id}
                         threadId={mt.id}
                         name={mt.name}
-                        lastMessage={mt.messages[mt.messages.length - 1].content}
+                        lastMessage={mt.messages[mt.messages.length - 1]}
                     />
                 ))}
             </ul>

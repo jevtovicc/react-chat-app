@@ -1,9 +1,11 @@
+import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { Message } from "../types/types";
 
 interface Props {
     threadId: number,
     name: string,
-    lastMessage: string,
+    lastMessage: Message,
 }
 
 function MessageThreadPreview({ threadId, name, lastMessage }: Props) {
@@ -18,8 +20,12 @@ function MessageThreadPreview({ threadId, name, lastMessage }: Props) {
                 alt='thread-avatar'
                 className="rounded-full h-14 w-14" />
             <div className="flex flex-col">
-                <strong>{name}</strong>
-                <small className="text-gray-400">{lastMessage}</small>
+                <div>
+                    <strong>{name}</strong>
+                    <span className="text-sm"> &#8226;</span>
+                    <small className="text-gray-400"> {dayjs(lastMessage.sentAt?.toString()).format('HH:mm')}</small>
+                </div>
+                <small className="text-gray-400">{lastMessage.content}</small>
             </div>
         </li>
     )
