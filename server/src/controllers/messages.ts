@@ -36,3 +36,18 @@ export async function addMessage(message: Message) {
 
     return newMessage
 }
+
+export async function createMessageThread(req: Request<{}, {}, { messageThreadName: string }>, res: Response) {
+    const { messageThreadName } = req.body;
+
+    const newMessageThread = await prisma.messageThread.create({
+        data: {
+            name: messageThreadName,
+        },
+        include: {
+            messages: true
+        }
+    })
+
+    res.json(newMessageThread)
+}

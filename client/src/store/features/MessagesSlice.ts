@@ -28,13 +28,14 @@ export const messagesSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
+
+        // fetchMessageThreads
         builder.addCase(fetchMessageThreads.pending, (state) => {
             state.status = 'loading';
             state.error = null
         });
 
         builder.addCase(fetchMessageThreads.fulfilled, (state, { payload }) => {
-            console.log(payload)
             state.messageThreads = payload
             state.status = 'idle'
         });
@@ -42,10 +43,28 @@ export const messagesSlice = createSlice({
         builder.addCase(fetchMessageThreads.rejected, (state, action) => {
             if (action.payload) {
                 state.error = action.payload;
-                state.error = 'Some error that should not occurr'
             }
             state.status = 'idle';
+        });
+
+        // createMessageThread
+        builder.addCase(createMessageThread.pending, (state) => {
+            state.status = 'loading';
+            state.error = null;
         })
+
+        builder.addCase(createMessageThread.fulfilled, (state, { payload }) => {
+            state.messageThreads.push(payload);
+            state.status = 'idle'
+        })
+
+        builder.addCase(createMessageThread.rejected, (state, action) => {
+            if (action.payload) {
+                state.error = action.payload;
+            }
+            state.status = 'idle';
+        });
+
     }
 });
 
@@ -54,6 +73,24 @@ export const fetchMessageThreads = createAsyncThunk<MessageThread[], {}, { rejec
     async ({ }, thunkApi) => {
         try {
             const response = await axios.get<MessageThread[]>('http://localhost:9000/api/messageThreads');
+            return response.data;
+        } catch (e) {
+            if (axios.isAxiosError(e) && e.response) {
+                return thunkApi.rejectWithValue(e.response.data as string)
+            } else {
+                return thunkApi.rejectWithValue('Error on server side occurred')
+            }
+        }
+    }
+)
+
+export const createMessageThread = createAsyncThunk<MessageThread, string, { rejectValue: string }>(
+    "createMessageThread",
+    async (messageThreadName, thunkApi) => {
+        try {
+            const response = await axios.post<MessageThread>('http://localhost:9000/api/messageThreads', {
+                messageThreadName: messageThreadName
+            });
             return response.data;
         } catch (e) {
             if (axios.isAxiosError(e) && e.response) {

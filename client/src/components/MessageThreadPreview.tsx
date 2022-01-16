@@ -23,9 +23,9 @@ function MessageThreadPreview({ threadId, name, lastMessage }: Props) {
                 <div>
                     <strong>{name}</strong>
                     <span className="text-sm"> &#8226;</span>
-                    <small className="text-gray-400"> {dayjs(lastMessage.sentAt?.toString()).format('HH:mm')}</small>
+                    <small className="text-gray-400"> {dayjs(lastMessage?.sentAt?.toString()).format('HH:mm')}</small>
                 </div>
-                <small className="text-gray-400">{lastMessage.content}</small>
+                <small className="text-gray-400">{lastMessage?.content}</small>
             </div>
         </li>
     )
