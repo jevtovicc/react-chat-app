@@ -19,9 +19,7 @@ function MessageThreadPreviews() {
                 {messageThreads.map(mt => (
                     <MessageThreadPreview
                         key={mt.id}
-                        threadId={mt.id}
-                        name={mt.name}
-                        lastMessage={mt.messages[mt.messages.length - 1]}
+                        messageThread={mt}
                     />
                 ))}
             </ul>

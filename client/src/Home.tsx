@@ -7,7 +7,7 @@ import Modal from "./ui/Modal"
 
 function Home() {
     const [addUserModalOpen, setAddUserModalOpen] = useState(false);
-    const [createMessageThreadModalOpen, setCreateMessageThreadModalOpen] = useState(true);
+    const [createMessageThreadModalOpen, setCreateMessageThreadModalOpen] = useState(false);
 
     return (
         <main className="bg-gray-900 h-screen">
