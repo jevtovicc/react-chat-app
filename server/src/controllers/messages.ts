@@ -45,9 +45,51 @@ export async function createMessageThread(req: Request<{}, {}, { messageThreadNa
             name: messageThreadName,
         },
         include: {
-            messages: true
+            messages: {
+                include: {
+                    user: true
+                }
+            }
         }
     })
 
     res.json(newMessageThread)
+}
+
+export async function addUserToMessageThread(req: Request<{ messageThreadId: string }, {}, { username: string }>, res: Response) {
+    const { messageThreadId } = req.params;
+    const { username } = req.body
+
+    const user = await prisma.user.findUnique({
+        where: {
+            username: username
+        }
+    })
+
+    if (!user) {
+        return res
+            .status(404)
+            .json(`User with username: ${username} not found`)
+    }
+
+    const messageThread = await prisma.messageThread.update({
+        where: {
+            id: +messageThreadId
+        },
+        data: {
+            users: {
+                connect: { id: user.id }
+            }
+        },
+        include: {
+            users: true,
+            messages: {
+                include: {
+                    user: true
+                }
+            }
+        }
+    })
+
+    res.json(messageThread)
 }

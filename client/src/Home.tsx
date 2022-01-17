@@ -13,7 +13,7 @@ function Home() {
         <main className="bg-gray-900 h-screen">
             <Navbar onClick={() => setAddUserModalOpen(true)} />
             <MessageThreads />
-            {addUserModalOpen && <Modal onClose={() => setAddUserModalOpen(false)}><AddUserForm /></Modal>}
+            {addUserModalOpen && <Modal onClose={() => setAddUserModalOpen(false)}><AddUserForm onSubmit={(username) => { }} /></Modal>}
             {createMessageThreadModalOpen && <Modal onClose={() => setCreateMessageThreadModalOpen(false)}><CreateMessageThreadForm /></Modal>}
         </main>
     )

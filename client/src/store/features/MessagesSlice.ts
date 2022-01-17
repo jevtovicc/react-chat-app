@@ -65,6 +65,25 @@ export const messagesSlice = createSlice({
             state.status = 'idle';
         });
 
+        // addUserToMessageThread
+        builder.addCase(addUserToMessageThread.pending, (state) => {
+            state.status = 'loading';
+            state.error = null;
+        })
+
+        builder.addCase(addUserToMessageThread.fulfilled, (state, { payload }) => {
+            const index = state.messageThreads.findIndex(mt => mt.id === payload.id);
+            state.messageThreads[index] = payload;
+            state.status = 'idle'
+        })
+
+        builder.addCase(addUserToMessageThread.rejected, (state, action) => {
+            if (action.payload) {
+                state.error = action.payload;
+            }
+            state.status = 'idle';
+        });
+
     }
 });
 
@@ -91,6 +110,22 @@ export const createMessageThread = createAsyncThunk<MessageThread, string, { rej
             const response = await axios.post<MessageThread>('http://localhost:9000/api/messageThreads', {
                 messageThreadName: messageThreadName
             });
+            return response.data;
+        } catch (e) {
+            if (axios.isAxiosError(e) && e.response) {
+                return thunkApi.rejectWithValue(e.response.data as string)
+            } else {
+                return thunkApi.rejectWithValue('Error on server side occurred')
+            }
+        }
+    }
+)
+
+export const addUserToMessageThread = createAsyncThunk<MessageThread, { messageThreadId: number, username: string }, { rejectValue: string }>(
+    "addUserToMessageThread",
+    async ({ messageThreadId, username }, thunkApi) => {
+        try {
+            const response = await axios.post<MessageThread>(`http://localhost:9000/api/messageThreads/${messageThreadId}/addUser`, { username: username })
             return response.data;
         } catch (e) {
             if (axios.isAxiosError(e) && e.response) {
