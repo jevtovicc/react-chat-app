@@ -103,11 +103,12 @@ export const fetchMessageThreads = createAsyncThunk<MessageThread[], {}, { rejec
     }
 )
 
-export const createMessageThread = createAsyncThunk<MessageThread, string, { rejectValue: string }>(
+export const createMessageThread = createAsyncThunk<MessageThread, { username: string, messageThreadName: string }, { rejectValue: string }>(
     "createMessageThread",
-    async (messageThreadName, thunkApi) => {
+    async ({ username, messageThreadName }, thunkApi) => {
         try {
             const response = await axios.post<MessageThread>('http://localhost:9000/api/messageThreads', {
+                username: username,
                 messageThreadName: messageThreadName
             });
             return response.data;

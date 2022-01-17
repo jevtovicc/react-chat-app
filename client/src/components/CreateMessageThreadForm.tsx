@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { createMessageThread } from "../store/features/MessagesSlice";
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { MessageThread } from "../types/types";
 
 function CreateMessageThreadForm() {
     const dispatch = useAppDispatch();
+    const user = useAppSelector(state => state.auth.user)
     const [groupName, setGroupName] = useState('');
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        dispatch(createMessageThread(groupName))
+        dispatch(createMessageThread({
+            username: user?.username!,
+            messageThreadName: groupName
+        }))
     }
 
     return (
