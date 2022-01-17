@@ -18,11 +18,13 @@ model User {
   password       String
   messages       Message[]
   messageThreads MessageThread[]
+  followedBy     User[]          @relation("UserFollows", references: [id])
+  following      User[]          @relation("UserFollows", references: [id])
 }
 
 model Message {
   id              Int           @id @default(autoincrement())
-  sentAt          DateTime?      @default(now())
+  sentAt          DateTime?     @default(now())
   content         String
   user            User          @relation(fields: [userId], references: [id])
   userId          Int

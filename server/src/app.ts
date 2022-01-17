@@ -4,6 +4,7 @@ import { Server } from 'socket.io'
 import cors from 'cors'
 import { router as authRoutes } from './routes/auth';
 import { router as messagesRoutes } from './routes/messages'
+import { router as userRoutes } from './routes/user'
 import * as messagesController from './controllers/messages'
 import { Message, User } from '@prisma/client';
 
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
 app.use('/api/messageThreads', messagesRoutes)
 
 io.on('connection', (socket) => {

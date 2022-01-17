@@ -68,7 +68,10 @@ function MessageThread() {
                             className="rounded-full h-14 w-14" />
                         <strong>{typingUser ? `${typingUser.username} is typing...` : messageThread?.name}</strong>
                     </div>
-                    <button className='p-3 border-2 border-gray-800 rounded-full hover:border-green-700 hover:text-green-700 transition-colors'><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button>
+                    <div className="space-x-3">
+                        <button className="text-gray-200 p-2 rounded-full hover:bg-blue-700 transition-colors"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg></button>
+                        <button className='p-3 border-2 border-gray-800 rounded-full hover:border-green-700 hover:text-green-700 transition-colors'><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button>
+                    </div>
                 </header>
                 <ul>
                     {messageThread?.messages.map(msg => (<ChatMessage key={msg.id} message={msg} />))}
