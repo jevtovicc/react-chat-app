@@ -11,7 +11,10 @@ function Home() {
 
     return (
         <main className="bg-gray-900 h-screen">
-            <Navbar onClick={() => setAddUserModalOpen(true)} />
+            <Navbar
+                openAddUserModal={() => setAddUserModalOpen(true)}
+                openCreateMessageThreadModal={() => setCreateMessageThreadModalOpen(true)}
+            />
             <MessageThreads />
             {addUserModalOpen && <Modal onClose={() => setAddUserModalOpen(false)}><AddUserForm onSubmit={(username) => { }} /></Modal>}
             {createMessageThreadModalOpen && <Modal onClose={() => setCreateMessageThreadModalOpen(false)}><CreateMessageThreadForm /></Modal>}
