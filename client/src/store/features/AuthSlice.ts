@@ -110,6 +110,25 @@ export const authSlice = createSlice({
             state.status = 'idle';
         });
 
+        // sendFriendRequest
+        builder.addCase(sendFriendRequest.pending, (state) => {
+            state.status = 'loading';
+            state.error = null;
+        })
+
+        builder.addCase(sendFriendRequest.fulfilled, (state, { payload }) => {
+            state.user?.following.push(payload)
+            state.user?.followedBy.push(payload)
+            state.status = 'idle'
+        })
+
+        builder.addCase(sendFriendRequest.rejected, (state, action) => {
+            if (action.payload) {
+                state.error = action.payload;
+            }
+            state.status = 'idle';
+        });
+
 
     }
 })
@@ -179,7 +198,29 @@ export const addParticipantsToMessageThread = createAsyncThunk<MessageThread, { 
     "addParticipantsToMessageThread",
     async ({ messageThreadId, participants }, thunkApi) => {
         try {
-            const response = await axios.post<MessageThread>(`http://localhost:9000/api/messageThreads/${messageThreadId}/addParticipants`, { participants: participants })
+            const response =
+                await axios.post<MessageThread>(`http://localhost:9000/api/messageThreads/${messageThreadId}/addParticipants`, {
+                    participants: participants
+                })
+            return response.data;
+        } catch (e) {
+            if (axios.isAxiosError(e) && e.response) {
+                return thunkApi.rejectWithValue(e.response.data as string)
+            } else {
+                return thunkApi.rejectWithValue('Error on server side occurred')
+            }
+        }
+    }
+)
+
+export const sendFriendRequest = createAsyncThunk<User, { senderUsername: string, friendUsername: string }, { rejectValue: string }>(
+    "sendFriendRequest",
+    async ({ senderUsername, friendUsername }, thunkApi) => {
+        try {
+            const response = await axios.post<User>(`http://localhost:9000/api/users/sendFriendRequest`, {
+                senderUsername: senderUsername,
+                friendUsername: friendUsername
+            })
             return response.data;
         } catch (e) {
             if (axios.isAxiosError(e) && e.response) {

@@ -8,3 +8,5 @@ router.get('/', userController.getAllUsers)
 
 // GET api/users/1
 router.get('/:userId', userController.getUser)
+
+router.post('/sendFriendRequest', userController.sendFriendRequest)

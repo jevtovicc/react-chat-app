@@ -1,25 +1,43 @@
 import { useState } from "react"
-import AddUserForm from "./components/AddUserForm";
+import AddFriendForm from "./components/AddFriendForm";
 import CreateMessageThreadForm from "./components/CreateMessageThreadForm";
 import MessageThreads from "./components/MessageThreads"
 import Navbar from "./components/Navbar"
+import { sendFriendRequest } from "./store/features/AuthSlice";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
 import Modal from "./ui/Modal"
 
 function Home() {
-    const [addUserModalOpen, setAddUserModalOpen] = useState(false);
+    const user = useAppSelector(state => state.auth.user)
+    const dispatch = useAppDispatch();
+    const [addFriendModalOpen, setAddFriendModalOpen] = useState(false);
     const [createMessageThreadModalOpen, setCreateMessageThreadModalOpen] = useState(false);
 
     return (
         <main className="bg-gray-900 h-screen">
             <Navbar
-                openAddUserModal={() => setAddUserModalOpen(true)}
-                openCreateMessageThreadModal={() => setCreateMessageThreadModalOpen(true)}
+                openCreateMessageThreadModal={() =>
+                    setCreateMessageThreadModalOpen(true)
+                }
+                openAddFriendModal={() => setAddFriendModalOpen(true)}
             />
             <MessageThreads />
-            {addUserModalOpen && <Modal onClose={() => setAddUserModalOpen(false)}><AddUserForm onSubmit={(username) => { }} /></Modal>}
-            {createMessageThreadModalOpen && <Modal onClose={() => setCreateMessageThreadModalOpen(false)}><CreateMessageThreadForm /></Modal>}
+            {addFriendModalOpen && (
+                <Modal onClose={() => setAddFriendModalOpen(false)}>
+                    <AddFriendForm
+                        onSubmit={(username) =>
+                            dispatch(sendFriendRequest({ senderUsername: user!.username, friendUsername: username }))
+                        }
+                    />
+                </Modal>
+            )}
+            {createMessageThreadModalOpen && (
+                <Modal onClose={() => setCreateMessageThreadModalOpen(false)}>
+                    <CreateMessageThreadForm />
+                </Modal>
+            )}
         </main>
-    )
+    );
 }
 
 export default Home
