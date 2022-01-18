@@ -1,35 +1,60 @@
 import { useState } from "react";
-import { useAppDispatch } from "../store/hooks";
+import { addParticipantsToMessageThread } from "../store/features/AuthSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { User } from "../types/types";
 
 interface Props {
-    onSubmit: (username: string) => void
+    onSubmit: (participants: User[]) => void
 }
 
 function AddUserForm({ onSubmit }: Props) {
+    const friends = useAppSelector(state => state.auth.user?.following)
+    const [participants, setParticipants] = useState<User[]>([])
 
-    const [inputValue, setInputValue] = useState('');
+    function addParticipant(participant: User) {
+        setParticipants(participants => [...participants, participant])
+    }
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        onSubmit(inputValue);
+    function removeParticipant(participantId: number) {
+        setParticipants(participants => participants.filter(p => p.id !== participantId))
     }
 
     return (
-        <div className="bg-gray-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <form onSubmit={handleSubmit}>
-                <div className="flex flex-col w-full">
-                    <label className="text-gray-400 text-sm mb-1">Username or Email</label>
-                    <input
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        type="text"
-                        className="px-3 py-2 rounded-md bg-transparent text-gray-300 border border-gray-700"
-                        placeholder="Search..." />
-                </div>
-                <div className="text-right">
-                    <button className="bg-blue-700 text-gray-200 p-3 rounded-md mt-4"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg></button>
-                </div>
-            </form>
+        <div className="bg-gray-900 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <h1 className="text-center text-xl">Add participants</h1>
+            <h5 className="text-center mb-4 text-sm text-gray-400">{participants.length}/{friends?.length}</h5>
+            <ul>
+                {friends?.map(friend => (
+                    <li key={friend.id} className="flex items-center justify-between border-y border-gray-800 py-2 px-4 hover:bg-gray-800 transition-colors">
+                        <div className="flex items-center space-x-5">
+                            <img
+                                src='https://www.w3schools.com/howto/img_avatar.png'
+                                alt='thread-avatar'
+                                className="rounded-full h-14 w-14" />
+                            <strong>
+                                {friend.username}
+                            </strong>
+                        </div>
+                        <input
+                            type="checkbox"
+                            onChange={(e) => {
+                                // e.target.checked is current state so if it is not checked -> remove participant
+                                if (!e.target.checked) {
+                                    console.log('Removing')
+                                    removeParticipant(friend.id)
+                                } else {
+                                    addParticipant(friend)
+                                }
+                            }} />
+                    </li>
+                ))}
+            </ul>
+            <div className="mx-2 mt-5">
+                <button
+                    onClick={() => onSubmit(participants)}
+                    className="bg-blue-800 hover:bg-blue-700 transition-colors text-gray-200 py-2 w-full rounded-md">Confirm</button>
+            </div>
+
         </div>
     )
 }

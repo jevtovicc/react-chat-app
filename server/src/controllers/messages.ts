@@ -1,4 +1,4 @@
-import { Message } from "@prisma/client";
+import { Message, User } from "@prisma/client";
 import { Request, Response } from "express";
 import prisma from '../../prisma/client'
 
@@ -72,21 +72,11 @@ export async function createMessageThread(req: Request<{}, {}, { username: strin
     res.json(newMessageThread)
 }
 
-export async function addUserToMessageThread(req: Request<{ messageThreadId: string }, {}, { username: string }>, res: Response) {
+export async function addParticipantsToMessageThreads(req: Request<{ messageThreadId: string }, {}, { participants: User[] }>, res: Response) {
     const { messageThreadId } = req.params;
-    const { username } = req.body
+    const { participants } = req.body
 
-    const user = await prisma.user.findUnique({
-        where: {
-            username: username
-        }
-    })
-
-    if (!user) {
-        return res
-            .status(404)
-            .json(`User with username: ${username} not found`)
-    }
+    const participantIds = participants.map(p => ({ id: p.id }))
 
     const messageThread = await prisma.messageThread.update({
         where: {
@@ -94,7 +84,7 @@ export async function addUserToMessageThread(req: Request<{ messageThreadId: str
         },
         data: {
             users: {
-                connect: { id: user.id }
+                connect: participantIds
             }
         },
         include: {

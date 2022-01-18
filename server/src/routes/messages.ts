@@ -10,4 +10,4 @@ router.post('/', messagesController.createMessageThread)
 
 router.post('/', messagesController.addMessage)
 
-router.post('/:messageThreadId/addUser', messagesController.addUserToMessageThread)
+router.post('/:messageThreadId/addParticipants', messagesController.addParticipantsToMessageThreads)

@@ -4,7 +4,9 @@ export interface User {
     lastName: string,
     username: string,
     password: string,
-    messageThreads: MessageThread[]
+    messageThreads: MessageThread[],
+    following: User[],
+    followedBy: User[]
 };
 
 export interface Message {

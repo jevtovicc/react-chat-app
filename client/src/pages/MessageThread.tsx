@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
 import AddUserForm from '../components/AddUserForm';
 import ChatMessage from '../components/ChatMessage';
-import { addMessage, addUserToMessageThread } from '../store/features/AuthSlice';
+import { addMessage, addParticipantsToMessageThread } from '../store/features/AuthSlice';
 import { sendMessage, userTyped } from '../store/features/SocketSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { Message, User } from '../types/types';
@@ -60,8 +60,8 @@ function MessageThread() {
         setInputValue(e.target.value)
     }
 
-    function handleAddUserToMessageThread(username: string) {
-        dispatch(addUserToMessageThread({ messageThreadId: messageThread?.id!, username: username }))
+    function handleAddParticipantsToMessageThreads(participants: User[]) {
+        dispatch(addParticipantsToMessageThread({ messageThreadId: messageThread?.id!, participants: participants }))
         setAddUserModalOpen(false)
     }
 
@@ -98,7 +98,10 @@ function MessageThread() {
 
             </form>
 
-            {addUserModalOpen && <Modal onClose={() => setAddUserModalOpen(false)}><AddUserForm onSubmit={handleAddUserToMessageThread} /></Modal>}
+            {addUserModalOpen &&
+                <Modal onClose={() => setAddUserModalOpen(false)}>
+                    <AddUserForm onSubmit={handleAddParticipantsToMessageThreads} />
+                </Modal>}
         </main>
     )
 }

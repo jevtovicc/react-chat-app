@@ -90,12 +90,12 @@ export const authSlice = createSlice({
         });
 
         // addUserToMessageThread
-        builder.addCase(addUserToMessageThread.pending, (state) => {
+        builder.addCase(addParticipantsToMessageThread.pending, (state) => {
             state.status = 'loading';
             state.error = null;
         })
 
-        builder.addCase(addUserToMessageThread.fulfilled, (state, { payload }) => {
+        builder.addCase(addParticipantsToMessageThread.fulfilled, (state, { payload }) => {
             const index = state.user?.messageThreads.findIndex(mt => mt.id === payload.id);
             if (index) {
                 state.user!.messageThreads[index] = payload;
@@ -103,7 +103,7 @@ export const authSlice = createSlice({
             state.status = 'idle'
         })
 
-        builder.addCase(addUserToMessageThread.rejected, (state, action) => {
+        builder.addCase(addParticipantsToMessageThread.rejected, (state, action) => {
             if (action.payload) {
                 state.error = action.payload;
             }
@@ -175,11 +175,11 @@ export const createMessageThread = createAsyncThunk<MessageThread, { username: s
     }
 )
 
-export const addUserToMessageThread = createAsyncThunk<MessageThread, { messageThreadId: number, username: string }, { rejectValue: string }>(
-    "addUserToMessageThread",
-    async ({ messageThreadId, username }, thunkApi) => {
+export const addParticipantsToMessageThread = createAsyncThunk<MessageThread, { messageThreadId: number, participants: User[] }, { rejectValue: string }>(
+    "addParticipantsToMessageThread",
+    async ({ messageThreadId, participants }, thunkApi) => {
         try {
-            const response = await axios.post<MessageThread>(`http://localhost:9000/api/messageThreads/${messageThreadId}/addUser`, { username: username })
+            const response = await axios.post<MessageThread>(`http://localhost:9000/api/messageThreads/${messageThreadId}/addParticipants`, { participants: participants })
             return response.data;
         } catch (e) {
             if (axios.isAxiosError(e) && e.response) {
