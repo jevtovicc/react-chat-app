@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createMessageThread } from "../store/features/MessagesSlice";
+import { createMessageThread } from "../store/features/AuthSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { MessageThread } from "../types/types";
 

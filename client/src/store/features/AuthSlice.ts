@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import axios, { AxiosError } from 'axios';
-import { User } from '../../types/types';
+import axios from 'axios';
+import { Message, MessageThread, User } from '../../types/types';
 
 // Define a type for the slice state
 interface AuthState {
@@ -26,6 +26,11 @@ export const authSlice = createSlice({
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
+        addMessage: (state, action: PayloadAction<Message>) => {
+            state.user!.messageThreads
+                .find((mt) => mt.id === action.payload.messageThreadId)
+                ?.messages.push(action.payload);
+        },
     },
     extraReducers: (builder) => {
 
@@ -64,6 +69,48 @@ export const authSlice = createSlice({
             }
             state.status = 'idle';
         })
+
+
+        // createMessageThread
+        builder.addCase(createMessageThread.pending, (state) => {
+            state.status = 'loading';
+            state.error = null;
+        })
+
+        builder.addCase(createMessageThread.fulfilled, (state, { payload }) => {
+            state.user?.messageThreads.push(payload);
+            state.status = 'idle'
+        })
+
+        builder.addCase(createMessageThread.rejected, (state, action) => {
+            if (action.payload) {
+                state.error = action.payload;
+            }
+            state.status = 'idle';
+        });
+
+        // addUserToMessageThread
+        builder.addCase(addUserToMessageThread.pending, (state) => {
+            state.status = 'loading';
+            state.error = null;
+        })
+
+        builder.addCase(addUserToMessageThread.fulfilled, (state, { payload }) => {
+            const index = state.user?.messageThreads.findIndex(mt => mt.id === payload.id);
+            if (index) {
+                state.user!.messageThreads[index] = payload;
+            }
+            state.status = 'idle'
+        })
+
+        builder.addCase(addUserToMessageThread.rejected, (state, action) => {
+            if (action.payload) {
+                state.error = action.payload;
+            }
+            state.status = 'idle';
+        });
+
+
     }
 })
 
@@ -109,4 +156,40 @@ export const signup = createAsyncThunk<User, SignupValues, { rejectValue: string
     }
 );
 
+export const createMessageThread = createAsyncThunk<MessageThread, { username: string, messageThreadName: string }, { rejectValue: string }>(
+    "createMessageThread",
+    async ({ username, messageThreadName }, thunkApi) => {
+        try {
+            const response = await axios.post<MessageThread>('http://localhost:9000/api/messageThreads', {
+                username: username,
+                messageThreadName: messageThreadName
+            });
+            return response.data;
+        } catch (e) {
+            if (axios.isAxiosError(e) && e.response) {
+                return thunkApi.rejectWithValue(e.response.data as string)
+            } else {
+                return thunkApi.rejectWithValue('Error on server side occurred')
+            }
+        }
+    }
+)
+
+export const addUserToMessageThread = createAsyncThunk<MessageThread, { messageThreadId: number, username: string }, { rejectValue: string }>(
+    "addUserToMessageThread",
+    async ({ messageThreadId, username }, thunkApi) => {
+        try {
+            const response = await axios.post<MessageThread>(`http://localhost:9000/api/messageThreads/${messageThreadId}/addUser`, { username: username })
+            return response.data;
+        } catch (e) {
+            if (axios.isAxiosError(e) && e.response) {
+                return thunkApi.rejectWithValue(e.response.data as string)
+            } else {
+                return thunkApi.rejectWithValue('Error on server side occurred')
+            }
+        }
+    }
+)
+
+export const { addMessage } = authSlice.actions
 export default authSlice.reducer

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
 import AddUserForm from '../components/AddUserForm';
 import ChatMessage from '../components/ChatMessage';
-import { addMessage, addUserToMessageThread } from '../store/features/MessagesSlice';
+import { addMessage, addUserToMessageThread } from '../store/features/AuthSlice';
 import { sendMessage, userTyped } from '../store/features/SocketSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { Message, User } from '../types/types';
@@ -13,7 +13,7 @@ function MessageThread() {
     const params = useParams<{ threadId: string }>()
     const navigate = useNavigate();
     // TODO: strongly type params to have id
-    const messageThread = useAppSelector(state => state.messages.messageThreads.find(mt => mt.id === +params.threadId!))
+    const messageThread = useAppSelector(state => state.auth.user!.messageThreads.find(mt => mt.id === +params.threadId!))
     const user = useAppSelector(state => state.auth.user);
     const socket = useAppSelector(state => state.socket.socket)
     const dispatch = useAppDispatch();
