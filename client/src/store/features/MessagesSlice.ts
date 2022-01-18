@@ -29,24 +29,6 @@ export const messagesSlice = createSlice({
     },
     extraReducers: (builder) => {
 
-        // fetchMessageThreads
-        builder.addCase(fetchMessageThreads.pending, (state) => {
-            state.status = 'loading';
-            state.error = null
-        });
-
-        builder.addCase(fetchMessageThreads.fulfilled, (state, { payload }) => {
-            state.messageThreads = payload
-            state.status = 'idle'
-        });
-
-        builder.addCase(fetchMessageThreads.rejected, (state, action) => {
-            if (action.payload) {
-                state.error = action.payload;
-            }
-            state.status = 'idle';
-        });
-
         // createMessageThread
         builder.addCase(createMessageThread.pending, (state) => {
             state.status = 'loading';
@@ -86,22 +68,6 @@ export const messagesSlice = createSlice({
 
     }
 });
-
-export const fetchMessageThreads = createAsyncThunk<MessageThread[], {}, { rejectValue: string }>(
-    "fetchMessageThreads",
-    async ({ }, thunkApi) => {
-        try {
-            const response = await axios.get<MessageThread[]>('http://localhost:9000/api/messageThreads');
-            return response.data;
-        } catch (e) {
-            if (axios.isAxiosError(e) && e.response) {
-                return thunkApi.rejectWithValue(e.response.data as string)
-            } else {
-                return thunkApi.rejectWithValue('Error on server side occurred')
-            }
-        }
-    }
-)
 
 export const createMessageThread = createAsyncThunk<MessageThread, { username: string, messageThreadName: string }, { rejectValue: string }>(
     "createMessageThread",

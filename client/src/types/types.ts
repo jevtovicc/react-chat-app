@@ -3,7 +3,8 @@ export interface User {
     firstName: string,
     lastName: string,
     username: string,
-    password: string
+    password: string,
+    messageThreads: MessageThread[]
 };
 
 export interface Message {
@@ -17,7 +18,8 @@ export interface Message {
 export interface MessageThread {
     id: number,
     name: string,
-    createdAt?: Date,
-    messages: Message[]
+    createdAt: Date,
+    messages: Message[],
+    users: User[]
 }
 

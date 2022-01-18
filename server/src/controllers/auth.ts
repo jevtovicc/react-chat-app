@@ -6,9 +6,22 @@ export async function login(req: Request<{}, {}, { username: string, password: s
 
     const user = await prisma.user.findUnique({
         where: {
-            username: username,
+            username: username
+        },
+        include: {
+            following: true,
+            followedBy: true,
+            messageThreads: {
+                include: {
+                    messages: {
+                        include: {
+                            user: true
+                        }
+                    }
+                }
+            }
         }
-    });
+    })
 
     if (!user || user.password !== password) {
         res

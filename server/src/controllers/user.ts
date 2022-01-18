@@ -21,7 +21,16 @@ export async function getUser(req: Request<{ userId: string }, {}, {}>, res: Res
         },
         include: {
             following: true,
-            followedBy: true
+            followedBy: true,
+            messageThreads: {
+                include: {
+                    messages: {
+                        include: {
+                            user: true
+                        }
+                    }
+                }
+            }
         }
     })
 
