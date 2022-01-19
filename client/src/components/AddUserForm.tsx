@@ -23,7 +23,7 @@ function AddUserForm({ onSubmit }: Props) {
         <div className="bg-gray-900 pt-5 pb-4 sm:p-6 sm:pb-4">
             <h1 className="text-center text-xl">Add participants</h1>
             <h5 className="text-center mb-4 text-sm text-gray-400">{participants.length}/{friends?.length}</h5>
-            <ul>
+            <ul className="h-52 overflow-auto">
                 {friends?.map(friend => (
                     <li key={friend.id} className="flex items-center justify-between border-y border-gray-800 py-2 px-4 hover:bg-gray-800 transition-colors">
                         <div className="flex items-center space-x-5">
