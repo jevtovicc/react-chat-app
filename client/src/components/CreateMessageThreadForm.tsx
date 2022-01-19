@@ -44,7 +44,7 @@ function CreateMessageThreadForm() {
                     <h1 className="text-center text-lg">Add participants</h1>
                     <h5 className="text-center text-sm text-gray-400">{participants.length}/{friends?.length}</h5>
                 </div>
-                <ul className="h-52 overflow-auto">
+                <ul className="max-h-52 overflow-auto">
                     {friends?.map(friend => (
                         <li key={friend.id} className="flex items-center justify-between border-y border-gray-800 py-2 px-4 hover:bg-gray-800 transition-colors">
                             <div className="flex items-center space-x-5">

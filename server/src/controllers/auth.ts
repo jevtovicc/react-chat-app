@@ -17,7 +17,8 @@ export async function login(req: Request<{}, {}, { username: string, password: s
                         include: {
                             user: true
                         }
-                    }
+                    },
+                    users: true
                 }
             }
         }
