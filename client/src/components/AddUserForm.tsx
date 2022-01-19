@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { addParticipantsToMessageThread } from "../store/features/AuthSlice";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { User } from "../types/types";
+import { useAppSelector } from "../store/hooks";
+import { MessageThread, User } from "../types/types";
 
 interface Props {
-    onSubmit: (participants: User[]) => void
+    onSubmit: (participants: User[]) => void,
+    messageThread: MessageThread
 }
 
-function AddUserForm({ onSubmit }: Props) {
-    const friends = useAppSelector(state => state.auth.user?.following)
+function AddUserForm({ onSubmit, messageThread }: Props) {
+    // Only show friends who are not already in the message thread
+    const friends = useAppSelector(state =>
+        state.auth.user?.following
+            .filter(friend => messageThread.users.findIndex(u => u.id === friend.id) === -1)
+    )
     const [participants, setParticipants] = useState<User[]>([])
 
     function addParticipant(participant: User) {

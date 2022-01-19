@@ -100,7 +100,7 @@ function MessageThread() {
 
             {addUserModalOpen &&
                 <Modal onClose={() => setAddUserModalOpen(false)}>
-                    <AddUserForm onSubmit={handleAddParticipantsToMessageThreads} />
+                    <AddUserForm messageThread={messageThread!} onSubmit={handleAddParticipantsToMessageThreads} />
                 </Modal>}
         </main>
     )
