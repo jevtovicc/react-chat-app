@@ -38,8 +38,8 @@ export async function addMessage(message: Message) {
     return newMessage
 }
 
-export async function createMessageThread(req: Request<{}, {}, { username: string, messageThreadName: string }>, res: Response) {
-    const { messageThreadName, username } = req.body;
+export async function createMessageThread(req: Request<{}, {}, { username: string, messageThreadName: string, participants: User[] }>, res: Response) {
+    const { messageThreadName, username, participants } = req.body;
 
     const user = await prisma.user.findUnique({
         where: {
@@ -53,14 +53,18 @@ export async function createMessageThread(req: Request<{}, {}, { username: strin
             .json("User not found")
     }
 
-    const newMessageThread = await prisma.messageThread.create({
+    const participantIds = participants.map(p => ({ id: p.id }))
+    participantIds.push({ id: user.id });
+
+    const messageThread = await prisma.messageThread.create({
         data: {
             name: messageThreadName,
             users: {
-                connect: { id: user.id }
+                connect: participantIds
             }
         },
         include: {
+            users: true,
             messages: {
                 include: {
                     user: true
@@ -69,7 +73,7 @@ export async function createMessageThread(req: Request<{}, {}, { username: strin
         }
     })
 
-    res.json(newMessageThread)
+    res.json(messageThread)
 }
 
 export async function addParticipantsToMessageThreads(req: Request<{ messageThreadId: string }, {}, { participants: User[] }>, res: Response) {

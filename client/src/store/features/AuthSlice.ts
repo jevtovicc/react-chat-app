@@ -175,13 +175,14 @@ export const signup = createAsyncThunk<User, SignupValues, { rejectValue: string
     }
 );
 
-export const createMessageThread = createAsyncThunk<MessageThread, { username: string, messageThreadName: string }, { rejectValue: string }>(
+export const createMessageThread = createAsyncThunk<MessageThread, { username: string, messageThreadName: string, participants: User[] }, { rejectValue: string }>(
     "createMessageThread",
-    async ({ username, messageThreadName }, thunkApi) => {
+    async ({ username, messageThreadName, participants }, thunkApi) => {
         try {
             const response = await axios.post<MessageThread>('http://localhost:9000/api/messageThreads', {
                 username: username,
-                messageThreadName: messageThreadName
+                messageThreadName: messageThreadName,
+                participants: participants
             });
             return response.data;
         } catch (e) {
