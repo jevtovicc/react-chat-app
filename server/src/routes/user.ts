@@ -3,6 +3,9 @@ import * as userController from '../controllers/user'
 
 export const router = express.Router();
 
+// GET api/users?username=Elon
+router.get('/', userController.findUserByUsername)
+
 // GET api/users/
 router.get('/', userController.getAllUsers)
 

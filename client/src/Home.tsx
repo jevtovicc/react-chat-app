@@ -15,7 +15,6 @@ function Home() {
     const [createMessageThreadModalOpen, setCreateMessageThreadModalOpen] = useState(false);
     const [recentNotificationsModalOpen, setRecentNotificationsModalOpen] = useState(false);
 
-
     return (
         <main className="bg-gray-900 h-screen">
             <Navbar
@@ -24,6 +23,7 @@ function Home() {
                 openAddFriendModal={() => setAddFriendModalOpen(true)}
             />
             <MessageThreads />
+
             {addFriendModalOpen && (
                 <Modal onClose={() => {
                     if (error) {
@@ -31,13 +31,10 @@ function Home() {
                     }
                     setAddFriendModalOpen(false)
                 }}>
-                    <AddFriendForm
-                        onSubmit={(username) =>
-                            dispatch(sendFriendRequest({ senderUsername: user!.username, friendUsername: username }))
-                        }
-                    />
+                    <AddFriendForm />
                 </Modal>
             )}
+
             {createMessageThreadModalOpen && (
                 <Modal onClose={() => {
                     if (error) {

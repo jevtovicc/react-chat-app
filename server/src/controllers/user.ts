@@ -37,6 +37,25 @@ export async function getUser(req: Request<{ userId: string }, {}, {}>, res: Res
     res.json(user)
 }
 
+export async function findUserByUsername(req: Request<{}, {}, {}, { username: string }>, res: Response) {
+    const { username } = req.query;
+
+    const user = await prisma.user.findUnique({
+        where: {
+            username: username
+        }
+    })
+
+    if (!user) {
+        res
+            .status(404)
+            .json(`User '${username}' not found`)
+    } else {
+        res.json(user)
+    }
+
+}
+
 export async function sendFriendRequest(req: Request<{}, {}, { senderUsername: string, friendUsername: string }>, res: Response) {
     const { senderUsername, friendUsername } = req.body;
 

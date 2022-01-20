@@ -6,14 +6,16 @@ import { Message, MessageThread, User } from '../../types/types';
 interface AuthState {
     status: 'loading' | 'idle',
     error: string | null
-    user?: User
+    user?: User,
+    searchedUser?: User
 }
 
 // Define the initial state using that type
 const initialState: AuthState = {
     status: 'idle',
     error: null,
-    user: undefined
+    user: undefined,
+    searchedUser: undefined
 }
 
 type LoginValues = {
@@ -33,6 +35,9 @@ export const authSlice = createSlice({
         },
         clearError: (state) => {
             state.error = null;
+        },
+        resetSearchedUser: (state) => {
+            state.searchedUser = undefined
         }
     },
     extraReducers: (builder) => {
@@ -132,6 +137,24 @@ export const authSlice = createSlice({
             state.status = 'idle';
         });
 
+        // findUserByUsername
+        builder.addCase(findUserByUsername.pending, (state) => {
+            state.status = 'loading';
+            state.error = null;
+        })
+
+        builder.addCase(findUserByUsername.fulfilled, (state, { payload }) => {
+            state.status = 'idle'
+            state.searchedUser = payload
+        })
+
+        builder.addCase(findUserByUsername.rejected, (state, action) => {
+            if (action.payload) {
+                state.error = action.payload;
+            }
+            state.status = 'idle';
+        });
+
 
     }
 })
@@ -217,6 +240,22 @@ export const addParticipantsToMessageThread = createAsyncThunk<MessageThread, { 
     }
 )
 
+export const findUserByUsername = createAsyncThunk<User, { username: string }, { rejectValue: string }>(
+    "findUserByUsername",
+    async ({ username }, thunkApi) => {
+        try {
+            const response = await axios.get<User>(`http://localhost:9000/api/users?username=${username}`)
+            return response.data;
+        } catch (e) {
+            if (axios.isAxiosError(e) && e.response) {
+                return thunkApi.rejectWithValue(e.response.data as string)
+            } else {
+                return thunkApi.rejectWithValue('Error on server side occurred')
+            }
+        }
+    }
+)
+
 export const sendFriendRequest = createAsyncThunk<User, { senderUsername: string, friendUsername: string }, { rejectValue: string }>(
     "sendFriendRequest",
     async ({ senderUsername, friendUsername }, thunkApi) => {
@@ -236,5 +275,5 @@ export const sendFriendRequest = createAsyncThunk<User, { senderUsername: string
     }
 )
 
-export const { addMessage, clearError } = authSlice.actions
+export const { addMessage, clearError, resetSearchedUser } = authSlice.actions
 export default authSlice.reducer
