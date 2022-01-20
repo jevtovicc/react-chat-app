@@ -31,6 +31,9 @@ export const authSlice = createSlice({
                 .find((mt) => mt.id === action.payload.messageThreadId)
                 ?.messages.push(action.payload);
         },
+        clearError: (state) => {
+            state.error = null;
+        }
     },
     extraReducers: (builder) => {
 
@@ -233,5 +236,5 @@ export const sendFriendRequest = createAsyncThunk<User, { senderUsername: string
     }
 )
 
-export const { addMessage } = authSlice.actions
+export const { addMessage, clearError } = authSlice.actions
 export default authSlice.reducer

@@ -4,16 +4,17 @@ import CreateMessageThreadForm from "./components/CreateMessageThreadForm";
 import MessageThreads from "./components/MessageThreads"
 import Navbar from "./components/Navbar"
 import RecentNotifications from "./components/RecentNotifications";
-import { sendFriendRequest } from "./store/features/AuthSlice";
+import { clearError, sendFriendRequest } from "./store/features/AuthSlice";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import Modal from "./ui/Modal"
 
 function Home() {
-    const user = useAppSelector(state => state.auth.user)
+    const { user, error } = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch();
     const [addFriendModalOpen, setAddFriendModalOpen] = useState(false);
     const [createMessageThreadModalOpen, setCreateMessageThreadModalOpen] = useState(false);
     const [recentNotificationsModalOpen, setRecentNotificationsModalOpen] = useState(false);
+
 
     return (
         <main className="bg-gray-900 h-screen">
@@ -24,7 +25,12 @@ function Home() {
             />
             <MessageThreads />
             {addFriendModalOpen && (
-                <Modal onClose={() => setAddFriendModalOpen(false)}>
+                <Modal onClose={() => {
+                    if (error) {
+                        dispatch(clearError())
+                    }
+                    setAddFriendModalOpen(false)
+                }}>
                     <AddFriendForm
                         onSubmit={(username) =>
                             dispatch(sendFriendRequest({ senderUsername: user!.username, friendUsername: username }))
@@ -33,13 +39,23 @@ function Home() {
                 </Modal>
             )}
             {createMessageThreadModalOpen && (
-                <Modal onClose={() => setCreateMessageThreadModalOpen(false)}>
+                <Modal onClose={() => {
+                    if (error) {
+                        dispatch(clearError())
+                    }
+                    setCreateMessageThreadModalOpen(false)
+                }}>
                     <CreateMessageThreadForm />
                 </Modal>
             )}
 
             {recentNotificationsModalOpen && (
-                <Modal onClose={() => setRecentNotificationsModalOpen(false)}>
+                <Modal onClose={() => {
+                    if (error) {
+                        dispatch(clearError())
+                    }
+                    setRecentNotificationsModalOpen(false);
+                }}>
                     <RecentNotifications />
                 </Modal>
             )}
