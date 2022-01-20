@@ -38,9 +38,17 @@ export async function login(req: Request<{}, {}, { username: string, password: s
 export async function signup(req: Request<{}, {}, { firstName: string, lastName: string, username: string, password: string }>, res: Response) {
     const { firstName, lastName, username, password } = req.body;
 
-    const user = await prisma.user.create({
-        data: { firstName, lastName, username, password }
-    });
+    try {
+        const user = await prisma.user.create({
+            data: { firstName, lastName, username, password }
+        });
 
-    res.json(user)
+        res.json(user)
+    } catch (e) {
+        console.error(e)
+        res
+            .status(409)
+            .json(`Username '${username}' is already taken. Please choose another one`)
+    }
+
 }

@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { login } from "../store/features/AuthSlice";
+import { clearError, login } from "../store/features/AuthSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 type FormValues = {
@@ -16,11 +17,15 @@ function Login({ toggleAuthState }: Props) {
     const error = useAppSelector(state => state.auth.error)
     const dispatch = useAppDispatch();
 
+    useEffect(() => {
+        dispatch(clearError())
+    }, [])
+
     return (
         <form
             onSubmit={handleSubmit((data) => dispatch(login({ username: data.username, password: data.password })))}
             className="bg-gray-900 text-gray-200 py-4 h-screen flex flex-col items-center justify-center">
-            {error && <p className="text-sm bg-red-900 text-gray-300 mb-4 p-4 rounded-sm shadow-xl">{error}</p>}
+            {error && <p className="text-sm text-center bg-red-900 text-gray-300 mb-4 p-4 rounded-sm shadow-xl">{error}</p>}
             <div className="flex flex-col space-y-3">
                 <div className='flex flex-col m-auto'>
                     <label htmlFor="username" className="text-sm mb-1">Username</label>

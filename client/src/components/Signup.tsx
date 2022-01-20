@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { signup } from "../store/features/AuthSlice";
-import { useAppDispatch } from "../store/hooks";
+import { clearError, signup } from "../store/features/AuthSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 type FormValues = {
     firstName: string;
@@ -15,7 +16,12 @@ interface Props {
 
 function Signup({ toggleAuthState }: Props) {
     const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+    const error = useAppSelector(state => state.auth.error)
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(clearError())
+    }, [])
 
     function handleSignup(data: FormValues) {
         dispatch(signup({
@@ -30,7 +36,7 @@ function Signup({ toggleAuthState }: Props) {
         <form
             onSubmit={handleSubmit(data => handleSignup(data))}
             className="bg-gray-900 text-gray-200 flex flex-col space-y-3 py-4 h-screen items-center justify-center">
-
+            {error && <p className="text-sm text-center bg-red-900 text-gray-300 mb-4 p-4 rounded-sm shadow-xl">{error}</p>}
             <div className="flex flex-col space-y-3">
                 <div className='flex flex-col m-auto'>
                     <label htmlFor="firstName" className="text-sm mb-1">First Name*</label>
