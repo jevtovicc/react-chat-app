@@ -74,8 +74,9 @@ function CreateMessageThreadForm() {
                 </ul>
                 <div className="mx-4 mt-5">
                     <button
+                        disabled={participants.length === 0}
                         onClick={handleCreateMessageThread}
-                        className="bg-blue-800 hover:bg-blue-700 transition-colors text-gray-200 py-2 w-full rounded-md">Create</button>
+                        className="bg-blue-800 hover:bg-blue-700 transition-colors text-gray-200 py-2 w-full rounded-md disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-blue-800">Create</button>
                 </div>
 
             </div>
