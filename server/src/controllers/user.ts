@@ -40,31 +40,38 @@ export async function getUser(req: Request<{ userId: string }, {}, {}>, res: Res
 export async function sendFriendRequest(req: Request<{}, {}, { senderUsername: string, friendUsername: string }>, res: Response) {
     const { senderUsername, friendUsername } = req.body;
 
-    const sender = await prisma.user.findUnique({
-        where: {
-            username: senderUsername
-        }
-    })
-
-    if (!sender) {
-        return res
-            .status(404)
-            .json(`User ${sender} not found`)
-    }
-
-    const friend = await prisma.user.update({
-        where: {
-            username: friendUsername
-        },
-        data: {
-            following: {
-                connect: { id: sender!.id },
-            },
-            followedBy: {
-                connect: { id: sender!.id },
+    try {
+        const sender = await prisma.user.findUnique({
+            where: {
+                username: senderUsername
             }
-        }
-    })
+        })
 
-    res.json(friend)
+        if (!sender) {
+            return res
+                .status(404)
+                .json(`User ${sender} not found`)
+        }
+
+        const friend = await prisma.user.update({
+            where: {
+                username: friendUsername
+            },
+            data: {
+                following: {
+                    connect: { id: sender!.id },
+                },
+                followedBy: {
+                    connect: { id: sender!.id },
+                }
+            }
+        })
+
+        res.json(friend)
+    } catch (e) {
+        console.error(e)
+        res
+            .status(404)
+            .json(`User ${friendUsername} not found`)
+    }
 }

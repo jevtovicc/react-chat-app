@@ -35,7 +35,7 @@ model Message {
 model MessageThread {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
-  name      String    @unique
+  name      String
   messages  Message[]
   users     User[]
 }

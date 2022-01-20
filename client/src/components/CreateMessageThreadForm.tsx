@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { User } from "../types/types";
 
 function CreateMessageThreadForm() {
+    const error = useAppSelector(state => state.auth.error)
     const dispatch = useAppDispatch();
     const user = useAppSelector(state => state.auth.user)
     const [groupName, setGroupName] = useState('');
@@ -29,6 +30,7 @@ function CreateMessageThreadForm() {
 
     return (
         <div className="bg-gray-900 text-gray-200 pt-5 pb-4 sm:p-6 sm:pb-4">
+            {error && <p className="text-sm text-center w-3/4 m-auto bg-red-900 text-gray-300 mb-4 p-4 rounded-sm shadow-xl">{error}</p>}
             <form className="mx-4">
                 <div className="flex flex-col w-full">
                     <label className="text-gray-400 text-sm mb-1">Group name</label>

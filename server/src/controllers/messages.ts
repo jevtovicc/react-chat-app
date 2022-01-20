@@ -44,13 +44,23 @@ export async function createMessageThread(req: Request<{}, {}, { username: strin
     const user = await prisma.user.findUnique({
         where: {
             username: username
+        },
+        include: {
+            messageThreads: true
         }
     })
+
 
     if (!user) {
         return res
             .status(404)
             .json("User not found")
+    }
+
+    if (user.messageThreads.findIndex(mt => mt.name === messageThreadName) !== -1) {
+        return res
+            .status(409)
+            .json(`Group '${messageThreadName}' already exists. Please choose another name`)
     }
 
     const participantIds = participants.map(p => ({ id: p.id }))

@@ -27,7 +27,7 @@ export async function login(req: Request<{}, {}, { username: string, password: s
     if (!user || user.password !== password) {
         res
             .status(401)
-            .json({ message: "Invalid credentials" })
+            .json("Username or Password are invalid. Please try again")
     } else {
         res
             .status(201)
