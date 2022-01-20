@@ -7,7 +7,7 @@ interface Props {
     messageThread: MessageThread
 }
 
-function AddUserForm({ onSubmit, messageThread }: Props) {
+function AddParticipantsForm({ onSubmit, messageThread }: Props) {
     // Only show friends who are not already in the message thread
     const friends = useAppSelector(state =>
         state.auth.user?.following
@@ -63,4 +63,4 @@ function AddUserForm({ onSubmit, messageThread }: Props) {
     )
 }
 
-export default AddUserForm;
+export default AddParticipantsForm;

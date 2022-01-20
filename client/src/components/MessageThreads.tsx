@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { useAppSelector } from "../store/hooks";
 import MessageThreadPreview from "./MessageThreadPreview";
 
-function MessageThreadPreviews() {
+function MessageThreads() {
     const user = useAppSelector(state => state.auth.user)
 
     return (
@@ -27,4 +27,4 @@ function MessageThreadPreviews() {
     )
 }
 
-export default MessageThreadPreviews
+export default MessageThreads
