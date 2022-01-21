@@ -3,7 +3,7 @@ import { findUserByUsername, resetSearchedUser, sendFriendRequest } from "../sto
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 function AddFriendForm() {
-    const { user, error, searchedUser } = useAppSelector(state => state.auth)
+    const { error, searchedUser } = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch();
     const [inputValue, setInputValue] = useState('');
 
@@ -14,7 +14,7 @@ function AddFriendForm() {
     }
 
     function handleConfirm() {
-        dispatch(sendFriendRequest({ senderUsername: user!.username, friendUsername: searchedUser!.username }))
+        dispatch(sendFriendRequest({ friendUsername: searchedUser!.username }))
     }
 
     function handleCancel() {

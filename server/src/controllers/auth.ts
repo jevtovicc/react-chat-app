@@ -33,9 +33,7 @@ export async function login(req: Request<{}, {}, { username: string, password: s
         // TODO: move to .env
         const TOKEN_SECURITY = '123456';
         const token = jsonwebtoken.sign(user, TOKEN_SECURITY)
-        res
-            .header('accessToken', token)
-            .json(user)
+        res.json({ accessToken: token, user: user })
     }
 }
 

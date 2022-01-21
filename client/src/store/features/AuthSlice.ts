@@ -1,19 +1,22 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios';
 import { Message, MessageThread, User } from '../../types/types';
+import { RootState } from '../store';
 
 // Define a type for the slice state
 interface AuthState {
     status: 'loading' | 'idle',
     error: string | null
+    accessToken?: string,
     user?: User,
-    searchedUser?: User
+    searchedUser?: User,
 }
 
 // Define the initial state using that type
 const initialState: AuthState = {
     status: 'idle',
     error: null,
+    accessToken: undefined,
     user: undefined,
     searchedUser: undefined
 }
@@ -49,7 +52,8 @@ export const authSlice = createSlice({
         });
 
         builder.addCase(login.fulfilled, (state, { payload }) => {
-            state.user = payload
+            state.accessToken = payload.accessToken
+            state.user = payload.user
             state.status = 'idle'
         });
 
@@ -159,11 +163,11 @@ export const authSlice = createSlice({
     }
 })
 
-export const login = createAsyncThunk<User, LoginValues, { rejectValue: string }>(
+export const login = createAsyncThunk<{ user: User, accessToken: string }, LoginValues, { rejectValue: string }>(
     "login",
     async ({ username, password }, thunkApi) => {
         try {
-            const response = await axios.post<User>('http://localhost:9000/api/auth/login', {
+            const response = await axios.post<{ user: User, accessToken: string }>('http://localhost:9000/api/auth/login', {
                 username: username,
                 password: password
             });
@@ -201,14 +205,18 @@ export const signup = createAsyncThunk<User, SignupValues, { rejectValue: string
     }
 );
 
-export const createMessageThread = createAsyncThunk<MessageThread, { username: string, messageThreadName: string, participants: User[] }, { rejectValue: string }>(
+export const createMessageThread = createAsyncThunk<MessageThread, { messageThreadName: string, participants: User[] }, { rejectValue: string, state: RootState }>(
     "createMessageThread",
-    async ({ username, messageThreadName, participants }, thunkApi) => {
+    async ({ messageThreadName, participants }, thunkApi) => {
+        const accessToken = thunkApi.getState().auth.accessToken;
         try {
             const response = await axios.post<MessageThread>('http://localhost:9000/api/messageThreads', {
-                username: username,
                 messageThreadName: messageThreadName,
                 participants: participants
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
             });
             return response.data;
         } catch (e) {
@@ -221,13 +229,18 @@ export const createMessageThread = createAsyncThunk<MessageThread, { username: s
     }
 )
 
-export const addParticipantsToMessageThread = createAsyncThunk<MessageThread, { messageThreadId: number, participants: User[] }, { rejectValue: string }>(
+export const addParticipantsToMessageThread = createAsyncThunk<MessageThread, { messageThreadId: number, participants: User[] }, { rejectValue: string, state: RootState }>(
     "addParticipantsToMessageThread",
     async ({ messageThreadId, participants }, thunkApi) => {
         try {
+            const accessToken = thunkApi.getState().auth.accessToken;
             const response =
                 await axios.post<MessageThread>(`http://localhost:9000/api/messageThreads/${messageThreadId}/addParticipants`, {
                     participants: participants
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
                 })
             return response.data;
         } catch (e) {
@@ -240,11 +253,16 @@ export const addParticipantsToMessageThread = createAsyncThunk<MessageThread, { 
     }
 )
 
-export const findUserByUsername = createAsyncThunk<User, { username: string }, { rejectValue: string }>(
+export const findUserByUsername = createAsyncThunk<User, { username: string }, { rejectValue: string, state: RootState }>(
     "findUserByUsername",
     async ({ username }, thunkApi) => {
+        const accessToken = thunkApi.getState().auth.accessToken;
         try {
-            const response = await axios.get<User>(`http://localhost:9000/api/users?username=${username}`)
+            const response = await axios.get<User>(`http://localhost:9000/api/users?username=${username}`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
             return response.data;
         } catch (e) {
             if (axios.isAxiosError(e) && e.response) {
@@ -256,13 +274,17 @@ export const findUserByUsername = createAsyncThunk<User, { username: string }, {
     }
 )
 
-export const sendFriendRequest = createAsyncThunk<User, { senderUsername: string, friendUsername: string }, { rejectValue: string }>(
+export const sendFriendRequest = createAsyncThunk<User, { friendUsername: string }, { rejectValue: string, state: RootState }>(
     "sendFriendRequest",
-    async ({ senderUsername, friendUsername }, thunkApi) => {
+    async ({ friendUsername }, thunkApi) => {
+        const accessToken = thunkApi.getState().auth.accessToken;
         try {
             const response = await axios.post<User>(`http://localhost:9000/api/users/sendFriendRequest`, {
-                senderUsername: senderUsername,
                 friendUsername: friendUsername
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
             })
             return response.data;
         } catch (e) {

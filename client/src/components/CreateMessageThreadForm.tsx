@@ -4,9 +4,8 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { User } from "../types/types";
 
 function CreateMessageThreadForm() {
-    const error = useAppSelector(state => state.auth.error)
+    const { error } = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch();
-    const user = useAppSelector(state => state.auth.user)
     const [groupName, setGroupName] = useState('');
 
     const friends = useAppSelector(state => state.auth.user?.following)
@@ -22,7 +21,6 @@ function CreateMessageThreadForm() {
 
     function handleCreateMessageThread() {
         dispatch(createMessageThread({
-            username: user?.username!,
             messageThreadName: groupName,
             participants: participants
         }))
