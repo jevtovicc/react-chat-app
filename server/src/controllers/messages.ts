@@ -1,8 +1,8 @@
-import { Message, User } from "@prisma/client";
+import { Message, MessageThread, User } from "@prisma/client";
 import { Request, Response } from "express";
 import prisma from '../../prisma/client'
 
-export async function getAllMessageThreads(req: Request, res: Response) {
+export async function getAllMessageThreads(_req: Request, res: Response) {
     const messageThreads = await prisma.messageThread.findMany({
         include: {
             messages: {
@@ -13,6 +13,7 @@ export async function getAllMessageThreads(req: Request, res: Response) {
             users: true
         }
     });
+
     res.json(messageThreads)
 }
 
@@ -38,24 +39,10 @@ export async function addMessage(message: Message) {
     return newMessage
 }
 
-export async function createMessageThread(req: Request<{}, {}, { username: string, messageThreadName: string, participants: User[] }>, res: Response) {
-    const { messageThreadName, username, participants } = req.body;
+export async function createMessageThread(req: Request<{}, {}, { messageThreadName: string, participants: User[] }>, res: Response) {
+    const { messageThreadName, participants } = req.body;
 
-    const user = await prisma.user.findUnique({
-        where: {
-            username: username
-        },
-        include: {
-            messageThreads: true
-        }
-    })
-
-
-    if (!user) {
-        return res
-            .status(404)
-            .json("User not found")
-    }
+    const user = res.locals.user as User & { messageThreads: MessageThread[] };
 
     if (user.messageThreads.findIndex(mt => mt.name === messageThreadName) !== -1) {
         return res

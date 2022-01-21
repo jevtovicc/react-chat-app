@@ -1,3 +1,4 @@
+import { MessageThread, User } from "@prisma/client";
 import { Request, Response } from "express";
 import prisma from '../../prisma/client'
 
@@ -56,32 +57,22 @@ export async function findUserByUsername(req: Request<{}, {}, {}, { username: st
 
 }
 
-export async function sendFriendRequest(req: Request<{}, {}, { senderUsername: string, friendUsername: string }>, res: Response) {
-    const { senderUsername, friendUsername } = req.body;
+export async function sendFriendRequest(req: Request<{}, {}, { friendUsername: string }>, res: Response) {
+    const { friendUsername } = req.body;
+
+    const user = res.locals.user as User & { messageThreads: MessageThread[] };
 
     try {
-        const sender = await prisma.user.findUnique({
-            where: {
-                username: senderUsername
-            }
-        })
-
-        if (!sender) {
-            return res
-                .status(404)
-                .json(`User ${sender} not found`)
-        }
-
         const friend = await prisma.user.update({
             where: {
                 username: friendUsername
             },
             data: {
                 following: {
-                    connect: { id: sender!.id },
+                    connect: { id: user.id },
                 },
                 followedBy: {
-                    connect: { id: sender!.id },
+                    connect: { id: user.id },
                 }
             }
         })

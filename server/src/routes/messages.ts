@@ -1,13 +1,14 @@
 import express from 'express'
 import * as messagesController from '../controllers/messages'
+import { authenticateToken } from '../middleware/jwt';
 
 export const router = express.Router();
 
 // GET /api/messageThreads/
-router.get('/', messagesController.getAllMessageThreads)
+router.get('/', authenticateToken, messagesController.getAllMessageThreads)
 
-router.post('/', messagesController.createMessageThread)
+router.post('/', authenticateToken, messagesController.createMessageThread)
 
-router.post('/', messagesController.addMessage)
+router.post('/', authenticateToken, messagesController.addMessage)
 
-router.post('/:messageThreadId/addParticipants', messagesController.addParticipantsToMessageThreads)
+router.post('/:messageThreadId/addParticipants', authenticateToken, messagesController.addParticipantsToMessageThreads)

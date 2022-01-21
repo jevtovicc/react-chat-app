@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../../prisma/client";
+import jsonwebtoken from 'jsonwebtoken';
 
 export async function login(req: Request<{}, {}, { username: string, password: string }>, res: Response) {
     const { username, password } = req.body;
@@ -29,7 +30,12 @@ export async function login(req: Request<{}, {}, { username: string, password: s
             .status(401)
             .json("Username or Password are invalid. Please try again")
     } else {
-        res.json(user)
+        // TODO: move to .env
+        const TOKEN_SECURITY = '123456';
+        const token = jsonwebtoken.sign(user, TOKEN_SECURITY)
+        res
+            .header('accessToken', token)
+            .json(user)
     }
 }
 
