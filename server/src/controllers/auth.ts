@@ -29,9 +29,7 @@ export async function login(req: Request<{}, {}, { username: string, password: s
             .status(401)
             .json("Username or Password are invalid. Please try again")
     } else {
-        res
-            .status(201)
-            .json(user)
+        res.json(user)
     }
 }
 
@@ -43,7 +41,9 @@ export async function signup(req: Request<{}, {}, { firstName: string, lastName:
             data: { firstName, lastName, username, password }
         });
 
-        res.json(user)
+        res
+            .status(201)
+            .json(user)
     } catch (e) {
         console.error(e)
         res
