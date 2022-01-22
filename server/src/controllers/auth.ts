@@ -28,9 +28,12 @@ export async function login(req: Request<{}, {}, { username: string, password: s
     if (!user || user.password !== password) {
         res.status(401).json("Username or Password are invalid. Please try again")
     } else {
-        // TODO: move to .env
-        const TOKEN_SECURITY = '123456';
-        const token = jsonwebtoken.sign(user, TOKEN_SECURITY)
+        const SECURITY_TOKEN = process.env.SECURITY_TOKEN;
+        if (!SECURITY_TOKEN) {
+            console.error('Security token not found in .env')
+            return res.status(500).json('Error on server side occurred')
+        }
+        const token = jsonwebtoken.sign(user, SECURITY_TOKEN)
         res.json({
             accessToken: token,
             user: user
@@ -46,8 +49,12 @@ export async function signup(req: Request<{}, {}, { firstName: string, lastName:
             data: { firstName, lastName, username, password }
         });
 
-        const TOKEN_SECURITY = '123456';
-        const token = jsonwebtoken.sign(user, TOKEN_SECURITY)
+        const SECURITY_TOKEN = process.env.SECURITY_TOKEN;
+        if (!SECURITY_TOKEN) {
+            console.error('Security token not found in .env')
+            return res.status(500).json('Error on server side occurred')
+        }
+        const token = jsonwebtoken.sign(user, SECURITY_TOKEN)
         res.status(201).json({
             accessToken: token,
             user: user
