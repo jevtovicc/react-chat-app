@@ -50,7 +50,21 @@ export async function signup(req: Request<{}, {}, { firstName: string, lastName:
         const hashedPassword = (await bcrypt.hash(password, salt)).toString();
 
         const user = await prisma.user.create({
-            data: { firstName, lastName, username, password: hashedPassword }
+            data: { firstName, lastName, username, password: hashedPassword },
+            include: {
+                following: true,
+                followedBy: true,
+                messageThreads: {
+                    include: {
+                        messages: {
+                            include: {
+                                user: true
+                            }
+                        },
+                        users: true
+                    }
+                }
+            }
         });
 
         const SECURITY_TOKEN = process.env.SECURITY_TOKEN;
