@@ -114,8 +114,19 @@ export async function leaveMessageThread(req: Request<{ messageThreadId: string 
             users: {
                 disconnect: { id: user.id }
             }
+        },
+        include: {
+            users: true
         }
     })
+
+    if (messageThread.users.length === 0) {
+        await prisma.messageThread.delete({
+            where: {
+                id: +messageThreadId
+            }
+        })
+    }
 
     res.json(messageThread)
 }
