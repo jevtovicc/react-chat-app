@@ -71,7 +71,8 @@ export const authSlice = createSlice({
         });
 
         builder.addCase(signup.fulfilled, (state, { payload }) => {
-            state.user = payload
+            state.accessToken = payload.accessToken
+            state.user = payload.user
             state.status = 'idle'
         });
 
@@ -189,11 +190,11 @@ type SignupValues = {
     password: string,
 }
 
-export const signup = createAsyncThunk<User, SignupValues, { rejectValue: string }>(
+export const signup = createAsyncThunk<{ user: User, accessToken: string }, SignupValues, { rejectValue: string }>(
     "signup",
     async (user, thunkApi) => {
         try {
-            const response = await axios.post<User>('http://localhost:9000/api/auth/signup', user);
+            const response = await axios.post<{ user: User, accessToken: string }>('http://localhost:9000/api/auth/signup', user);
             return response.data;
         } catch (e) {
             if (axios.isAxiosError(e) && e.response) {

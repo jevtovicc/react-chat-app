@@ -4,12 +4,12 @@ import CreateMessageThreadForm from "./components/CreateMessageThreadForm";
 import MessageThreads from "./components/MessageThreads"
 import Navbar from "./components/Navbar"
 import RecentNotifications from "./components/RecentNotifications";
-import { clearError, sendFriendRequest } from "./store/features/AuthSlice";
+import { clearError } from "./store/features/AuthSlice";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import Modal from "./ui/Modal"
 
 function Home() {
-    const { user, error } = useAppSelector(state => state.auth)
+    const { error } = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch();
     const [addFriendModalOpen, setAddFriendModalOpen] = useState(false);
     const [createMessageThreadModalOpen, setCreateMessageThreadModalOpen] = useState(false);
