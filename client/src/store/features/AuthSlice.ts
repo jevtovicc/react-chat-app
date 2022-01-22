@@ -161,6 +161,24 @@ export const authSlice = createSlice({
         });
 
 
+        // leaveMessageThread
+        builder.addCase(leaveMessageThread.pending, (state) => {
+            state.status = 'loading';
+            state.error = null;
+        })
+
+        builder.addCase(leaveMessageThread.fulfilled, (state, { payload }) => {
+            state.status = 'idle'
+            state.user!.messageThreads = state.user!.messageThreads.filter(mt => mt.id !== payload.id)
+        })
+
+        builder.addCase(leaveMessageThread.rejected, (state, action) => {
+            if (action.payload) {
+                state.error = action.payload;
+            }
+            state.status = 'idle';
+        });
+
     }
 })
 
@@ -253,6 +271,32 @@ export const addParticipantsToMessageThread = createAsyncThunk<MessageThread, { 
         }
     }
 )
+
+export const leaveMessageThread = createAsyncThunk<MessageThread, { messageThreadId: number }, { rejectValue: string, state: RootState }>(
+    "leaveMessageThread",
+    async ({ messageThreadId }, thunkApi) => {
+        try {
+            const accessToken = thunkApi.getState().auth.accessToken;
+            const response =
+                await axios.get<MessageThread>(`http://localhost:9000/api/messageThreads/leaveMessageThread/${messageThreadId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                })
+            return response.data;
+        } catch (e) {
+            if (axios.isAxiosError(e) && e.response) {
+                return thunkApi.rejectWithValue(e.response.data as string)
+            } else {
+                return thunkApi.rejectWithValue('Error on server side occurred')
+            }
+        }
+    }
+)
+
+
+
+
 
 export const findUserByUsername = createAsyncThunk<User, { username: string }, { rejectValue: string, state: RootState }>(
     "findUserByUsername",

@@ -100,3 +100,22 @@ export async function addParticipantsToMessageThreads(req: Request<{ messageThre
 
     res.json(messageThread)
 }
+
+export async function leaveMessageThread(req: Request<{ messageThreadId: string }, {}, {}>, res: Response) {
+    const { messageThreadId } = req.params
+
+    const user = res.locals.user as User;
+
+    const messageThread = await prisma.messageThread.update({
+        where: {
+            id: +messageThreadId
+        },
+        data: {
+            users: {
+                disconnect: { id: user.id }
+            }
+        }
+    })
+
+    res.json(messageThread)
+}

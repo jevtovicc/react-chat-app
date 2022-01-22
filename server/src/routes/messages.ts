@@ -12,3 +12,5 @@ router.post('/', authenticateToken, messagesController.createMessageThread)
 router.post('/', authenticateToken, messagesController.addMessage)
 
 router.post('/:messageThreadId/addParticipants', authenticateToken, messagesController.addParticipantsToMessageThreads)
+
+router.get('/leaveMessageThread/:messageThreadId', authenticateToken, messagesController.leaveMessageThread)
