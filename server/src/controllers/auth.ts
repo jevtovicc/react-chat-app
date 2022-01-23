@@ -6,27 +6,54 @@ import bcrypt from 'bcryptjs'
 export async function login(req: Request<{}, {}, { username: string, password: string }>, res: Response) {
     const { username, password } = req.body;
 
+    const _user = await prisma.user.findUnique({
+        where: {
+            username: username
+        },
+    })
+
+    if (!_user || !(await bcrypt.compare(password, _user.password))) {
+        return res.status(401).json("Username or Password are invalid. Please try again")
+    }
+
     const user = await prisma.user.findUnique({
         where: {
             username: username
         },
-        include: {
+        select: {
+            firstName: true,
+            lastName: true,
+            username: true,
             following: true,
             followedBy: true,
             messageThreads: {
                 include: {
                     messages: {
                         include: {
-                            user: true
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                    username: true,
+                                }
+                            }
                         }
                     },
-                    users: true
+                    users: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            username: true,
+                        }
+                    }
+
                 }
             }
-        }
+        },
+
     })
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user) {
         res.status(401).json("Username or Password are invalid. Please try again")
     } else {
         const SECURITY_TOKEN = process.env.SECURITY_TOKEN;
@@ -51,20 +78,36 @@ export async function signup(req: Request<{}, {}, { firstName: string, lastName:
 
         const user = await prisma.user.create({
             data: { firstName, lastName, username, password: hashedPassword },
-            include: {
+            select: {
+                firstName: true,
+                lastName: true,
+                username: true,
                 following: true,
                 followedBy: true,
                 messageThreads: {
                     include: {
                         messages: {
                             include: {
-                                user: true
+                                user: {
+                                    select: {
+                                        firstName: true,
+                                        lastName: true,
+                                        username: true,
+                                    }
+                                }
                             }
                         },
-                        users: true
+                        users: {
+                            select: {
+                                firstName: true,
+                                lastName: true,
+                                username: true,
+                            }
+                        }
+
                     }
                 }
-            }
+            },
         });
 
         const SECURITY_TOKEN = process.env.SECURITY_TOKEN;
