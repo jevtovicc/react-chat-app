@@ -303,7 +303,7 @@ export const findUserByUsername = createAsyncThunk<User, { username: string }, {
     async ({ username }, thunkApi) => {
         const accessToken = thunkApi.getState().auth.accessToken;
         try {
-            const response = await axios.get<User>(`http://localhost:9000/api/users?username=${username}`, {
+            const response = await axios.get<User>(`http://localhost:9000/api/users/findByUsername?username=${username}`, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }

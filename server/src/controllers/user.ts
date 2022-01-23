@@ -119,6 +119,12 @@ export async function findUserByUsername(req: Request<{}, {}, {}, { username: st
     const user = await prisma.user.findUnique({
         where: {
             username: username
+        },
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
         }
     })
 
@@ -149,6 +155,12 @@ export async function sendFriendRequest(req: Request<{}, {}, { friendUsername: s
                 followedBy: {
                     connect: { id: user.id },
                 }
+            },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                username: true,
             }
         })
 

@@ -25,8 +25,23 @@ export async function login(req: Request<{}, {}, { username: string, password: s
             firstName: true,
             lastName: true,
             username: true,
-            following: true,
-            followedBy: true,
+            following: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    username: true,
+                }
+            },
+            followedBy: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    username: true,
+                },
+
+            },
             messageThreads: {
                 include: {
                     messages: {
@@ -86,8 +101,23 @@ export async function signup(req: Request<{}, {}, { firstName: string, lastName:
                 firstName: true,
                 lastName: true,
                 username: true,
-                following: true,
-                followedBy: true,
+                following: {
+                    select: {
+                        id: true,
+                        firstName: true,
+                        lastName: true,
+                        username: true,
+                    }
+                },
+                followedBy: {
+                    select: {
+                        id: true,
+                        firstName: true,
+                        lastName: true,
+                        username: true,
+                    },
+
+                },
                 messageThreads: {
                     include: {
                         messages: {
