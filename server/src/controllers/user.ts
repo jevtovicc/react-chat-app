@@ -4,9 +4,51 @@ import prisma from '../../prisma/client'
 
 export async function getAllUsers(_req: Request, res: Response) {
     const users = await prisma.user.findMany({
-        include: {
-            following: true,
-            followedBy: true
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            following: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    username: true,
+                }
+            },
+            followedBy: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    username: true,
+                }
+            },
+            messageThreads: {
+                include: {
+                    messages: {
+                        include: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    firstName: true,
+                                    lastName: true,
+                                    username: true,
+                                }
+                            }
+                        }
+                    },
+                    users: {
+                        select: {
+                            id: true,
+                            firstName: true,
+                            lastName: true,
+                            username: true,
+                        }
+                    }
+                }
+            }
         }
     })
 
@@ -20,14 +62,47 @@ export async function getUser(req: Request<{ userId: string }, {}, {}>, res: Res
         where: {
             id: +userId
         },
-        include: {
-            following: true,
-            followedBy: true,
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            following: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    username: true,
+                }
+            },
+            followedBy: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    username: true,
+                }
+            },
             messageThreads: {
                 include: {
                     messages: {
                         include: {
-                            user: true
+                            user: {
+                                select: {
+                                    id: true,
+                                    firstName: true,
+                                    lastName: true,
+                                    username: true,
+                                }
+                            }
+                        }
+                    },
+                    users: {
+                        select: {
+                            id: true,
+                            firstName: true,
+                            lastName: true,
+                            username: true,
                         }
                     }
                 }

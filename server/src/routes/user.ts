@@ -5,7 +5,7 @@ import { authenticateToken } from '../middleware/jwt';
 export const router = express.Router();
 
 // GET api/users?username=Elon
-router.get('/', authenticateToken, userController.findUserByUsername)
+// router.get('/', authenticateToken, userController.findUserByUsername)
 
 // GET api/users/
 router.get('/', userController.getAllUsers)
