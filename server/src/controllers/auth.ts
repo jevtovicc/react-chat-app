@@ -21,6 +21,7 @@ export async function login(req: Request<{}, {}, { username: string, password: s
             username: username
         },
         select: {
+            id: true,
             firstName: true,
             lastName: true,
             username: true,
@@ -32,6 +33,7 @@ export async function login(req: Request<{}, {}, { username: string, password: s
                         include: {
                             user: {
                                 select: {
+                                    id: true,
                                     firstName: true,
                                     lastName: true,
                                     username: true,
@@ -41,6 +43,7 @@ export async function login(req: Request<{}, {}, { username: string, password: s
                     },
                     users: {
                         select: {
+                            id: true,
                             firstName: true,
                             lastName: true,
                             username: true,
@@ -79,6 +82,7 @@ export async function signup(req: Request<{}, {}, { firstName: string, lastName:
         const user = await prisma.user.create({
             data: { firstName, lastName, username, password: hashedPassword },
             select: {
+                id: true,
                 firstName: true,
                 lastName: true,
                 username: true,
@@ -90,6 +94,7 @@ export async function signup(req: Request<{}, {}, { firstName: string, lastName:
                             include: {
                                 user: {
                                     select: {
+                                        id: true,
                                         firstName: true,
                                         lastName: true,
                                         username: true,
@@ -99,6 +104,7 @@ export async function signup(req: Request<{}, {}, { firstName: string, lastName:
                         },
                         users: {
                             select: {
+                                id: true,
                                 firstName: true,
                                 lastName: true,
                                 username: true,
