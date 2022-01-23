@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import prisma from './client'
+import bcrypt from 'bcryptjs'
 
 const userData: Prisma.UserCreateInput[] = [
     {
@@ -31,9 +32,14 @@ const userData: Prisma.UserCreateInput[] = [
 
 async function main() {
     console.log('Start seeding...')
+
     for (const u of userData) {
+        const salt = (await bcrypt.genSalt(10)).toString();
         const user = await prisma.user.create({
-            data: u
+            data: {
+                ...u,
+                password: await bcrypt.hash(u.password, salt)
+            }
         })
     }
     console.log('Seeding finished')
